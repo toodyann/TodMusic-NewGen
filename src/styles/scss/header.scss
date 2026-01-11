@@ -3,16 +3,76 @@
   align-items: center;
   justify-content: space-between;
   padding: 32px;
-  gap: 24px;
+  gap: 12px;
+  position: relative;
+  z-index: 1001;
+  background: var(--bg-primary);
+
+  .burger-btn {
+    display: none;
+    width: 40px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+
+    &:hover {
+      background: var(--input-bg);
+      border-color: var(--text-primary);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+  }
 
   .logo_container {
     padding: 0;
     flex-shrink: 0;
+    margin-right: 12px;
   }
 
-  .custom-input {
+  .home-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    color: var(--text-primary);
+    font-size: 0.9375rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-right: 4px;
+
+    &:hover {
+      background: var(--input-bg);
+      border-color: var(--text-primary);
+    }
+
+    &:active {
+      transform: scale(0.98);
+    }
+
+    svg {
+      width: 20px;
+      height: 20px;
+    }
+  }
+
+  .search-input-wrapper {
     max-width: 500px;
     flex: 1;
+    margin-right: 4px;
   }
 }
 
@@ -21,4 +81,53 @@
   top: 0;
   right: 0;
   flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 16px;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .burger-btn {
+      display: none;
+    }
+
+    .home-btn {
+      display: none;
+    }
+
+    .logo_container {
+      margin-right: 8px;
+
+      .main_logo {
+        font-size: 1.5rem;
+      }
+
+      .logo_image {
+        width: 2rem;
+        height: 2rem;
+      }
+    }
+
+    .home-btn {
+      padding: 8px 12px;
+      font-size: 0.875rem;
+      margin-right: 0;
+
+      svg {
+        width: 18px;
+        height: 18px;
+      }
+    }
+
+    .search-input-wrapper {
+      display: none;
+    }
+
+    .theme-toggle {
+      display: none;
+    }
+  }
 }

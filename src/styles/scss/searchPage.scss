@@ -1,0 +1,18 @@
+.search-page {
+  flex: 1;
+  padding: 24px 32px;
+  overflow-y: auto;
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .search-page {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+
+    .search-input-wrapper {
+      max-width: 100%;
+    }
+  }
+}

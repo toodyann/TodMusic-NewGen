@@ -1,31 +1,70 @@
-.custom-input {
+.search-input-wrapper {
+  position: relative;
   width: 100%;
+  display: flex;
+  align-items: center;
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  background-color: var(--input-bg);
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: var(--input-border-focus);
+  }
+
+  &:focus-within {
+    border-color: var(--input-border-focus);
+    border-width: 2px;
+  }
+}
+
+.custom-input {
+  flex: 1;
   padding: 0.5em 1em;
   font-size: 16px;
   font-family: inherit;
   line-height: 1.5;
 
-  background-color: var(--input-bg);
+  background-color: transparent;
   color: var(--input-text);
 
-  border: 1px solid var(--input-border);
-  border-radius: 8px;
+  border: none;
+  border-radius: 8px 0 0 8px;
 
   outline: none;
-  transition: all 0.2s ease;
 
   &::placeholder {
     color: var(--input-placeholder);
   }
 
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.search-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 0 8px 8px 0;
+  background: transparent;
+  border: none;
+  border-left: 1px solid var(--input-border);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+
   &:hover:not(:disabled) {
-    border-color: var(--input-border-focus);
+    background: var(--input-border);
+    color: var(--text-primary);
   }
 
-  &:focus {
-    border-color: var(--input-border-focus);
-    border-width: 2px;
-    padding: 11px 15px;
+  &:active {
+    transform: scale(0.98);
   }
 
   &:disabled {
@@ -33,18 +72,8 @@
     cursor: not-allowed;
   }
 
-  &[type="search"] {
-    -webkit-appearance: none;
-    appearance: none;
-
-    &::-webkit-search-cancel-button {
-      -webkit-appearance: none;
-      appearance: none;
-      height: 16px;
-      width: 16px;
-      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>');
-      background-size: 16px 16px;
-      cursor: pointer;
-    }
+  svg {
+    width: 20px;
+    height: 20px;
   }
 }
