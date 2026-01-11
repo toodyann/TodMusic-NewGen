@@ -1,0 +1,27 @@
+:root {
+  /* Light Theme - White */
+  --bg-primary: #ffffff;
+  --text-primary: #000000;
+  --text-secondary: #666666;
+
+  /* Input styles */
+  --input-bg: #f5f5f5;
+  --input-border: #d0d0d0;
+  --input-border-focus: #000000;
+  --input-text: #000000;
+  --input-placeholder: #999999;
+}
+
+[data-theme="dark"] {
+  /* Dark Theme - Black */
+  --bg-primary: #000000;
+  --text-primary: #ffffff;
+  --text-secondary: #aaaaaa;
+
+  /* Input styles */
+  --input-bg: #1a1a1a;
+  --input-border: #333333;
+  --input-border-focus: #ffffff;
+  --input-text: #ffffff;
+  --input-placeholder: #666666;
+}

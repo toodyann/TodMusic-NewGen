@@ -1,0 +1,24 @@
+@use "../fonts.scss";
+@use "../variables.scss";
+
+.logo_container {
+  display: flex;
+  align-items: center;
+  padding: 32px;
+}
+
+.main_logo {
+  font-family: var(--logo-font-family);
+  color: var(--text-primary);
+  font-size: 2.3rem;
+  font-weight: 600;
+  font-style: normal;
+  margin-left: 1rem;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.logo_image {
+  width: 2.5rem;
+  height: 2.5rem;
+}

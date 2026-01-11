@@ -1,0 +1,15 @@
+@import "./reset.scss";
+@import "./variables.scss";
+@import "./fonts.scss";
+
+html,
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+* {
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
