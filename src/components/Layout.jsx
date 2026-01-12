@@ -6,6 +6,7 @@ import SongInfo from "./SongInfo.jsx";
 import BottomNav from "./BottomNav.jsx";
 import Input from "./Input.jsx";
 import Profile from "./Profile.jsx";
+import MiniPlayer from "./MiniPlayer.jsx";
 import { searchTracks } from "../Scripts/api.js";
 import "../styles/scss/layout.scss";
 import "../styles/scss/searchPage.scss";
@@ -29,11 +30,22 @@ export default function Layout() {
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
   const [playingSongId, setPlayingSongId] = useState(null);
+  const [isFullscreenPlayer, setIsFullscreenPlayer] = useState(false);
+  const [isClosingPlayer, setIsClosingPlayer] = useState(false);
   const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem("todmusic_favorites");
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Оновлюємо URL картинок до 600x600
+        return parsed.map((song) => ({
+          ...song,
+          thumbnail: song.thumbnail
+            ? song.thumbnail
+                .replace(/100x100/g, "600x600")
+                .replace(/60x60/g, "600x600")
+            : null,
+        }));
       } catch (error) {
         console.error("Error loading favorites:", error);
         return [];
@@ -45,7 +57,19 @@ export default function Layout() {
     const saved = localStorage.getItem("todmusic_playlists");
     if (saved) {
       try {
-        return JSON.parse(saved);
+        const parsed = JSON.parse(saved);
+        // Оновлюємо URL картинок до 600x600 в усіх плейлістах
+        return parsed.map((playlist) => ({
+          ...playlist,
+          songs: playlist.songs.map((song) => ({
+            ...song,
+            thumbnail: song.thumbnail
+              ? song.thumbnail
+                  .replace(/100x100/g, "600x600")
+                  .replace(/60x60/g, "600x600")
+              : null,
+          })),
+        }));
       } catch (error) {
         console.error("Error loading playlists:", error);
         return [];
@@ -139,6 +163,14 @@ export default function Layout() {
     }
   };
 
+  const handleCloseFullscreenPlayer = () => {
+    setIsClosingPlayer(true);
+    setTimeout(() => {
+      setIsFullscreenPlayer(false);
+      setIsClosingPlayer(false);
+    }, 300);
+  };
+
   const toggleFavorite = (song) => {
     if (!song) return;
 
@@ -157,7 +189,6 @@ export default function Layout() {
     setPlaylists((prev) => {
       const updated = prev.map((playlist) => {
         if (playlist.id === playlistId) {
-          // Перевірка чи трек вже є в плейлісті
           const exists = playlist.songs.find((s) => s.id === song.id);
           if (exists) return playlist;
 
@@ -184,7 +215,6 @@ export default function Layout() {
   };
   const handleDeletePlaylist = (playlistId) => {
     setPlaylists((prev) => prev.filter((p) => p.id !== playlistId));
-    // Якщо видаляємо активний плейліст, переключаємо на улюблені
     if (selectedPlaylist === playlistId) {
       setSelectedPlaylist("favorites");
     }
@@ -229,7 +259,6 @@ export default function Layout() {
 
   const handleHomeClick = () => {
     setSelectedPlaylist(null);
-    setSelectedSong(null);
     setShowProfile(false);
     setShowSearch(false);
     setShowPlaylists(false);
@@ -350,6 +379,91 @@ export default function Layout() {
           onPreviousSong={handlePreviousSong}
         />
       </div>
+
+      <MiniPlayer
+        song={selectedSong}
+        isPlaying={playingSongId === selectedSong?.id}
+        onPlayPause={() => handlePlayPause(selectedSong?.id)}
+        onExpand={() => setIsFullscreenPlayer(true)}
+      />
+
+      {isFullscreenPlayer && (
+        <div
+          className={`fullscreen-player-overlay ${
+            isClosingPlayer ? "closing" : ""
+          }`}
+          onClick={handleCloseFullscreenPlayer}
+        >
+          <div
+            className={`fullscreen-player ${isClosingPlayer ? "closing" : ""}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="fullscreen-player-header">
+              <div
+                className="drag-handle"
+                onTouchStart={(e) => {
+                  const startY = e.touches[0].clientY;
+                  const handleTouchMove = (moveEvent) => {
+                    const currentY = moveEvent.touches[0].clientY;
+                    const diff = currentY - startY;
+                    if (diff > 100) {
+                      handleCloseFullscreenPlayer();
+                      document.removeEventListener(
+                        "touchmove",
+                        handleTouchMove
+                      );
+                    }
+                  };
+                  document.addEventListener("touchmove", handleTouchMove);
+                  document.addEventListener(
+                    "touchend",
+                    () => {
+                      document.removeEventListener(
+                        "touchmove",
+                        handleTouchMove
+                      );
+                    },
+                    { once: true }
+                  );
+                }}
+              ></div>
+              <button
+                className="close-fullscreen-btn"
+                onClick={handleCloseFullscreenPlayer}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <line x1="12" y1="5" x2="12" y2="19"></line>
+                  <polyline points="19 12 12 19 5 12"></polyline>
+                </svg>
+              </button>
+            </div>
+            <SongInfo
+              song={selectedSong}
+              isPlaying={playingSongId === selectedSong?.id}
+              onPlayPause={() => handlePlayPause(selectedSong?.id)}
+              onToggleFavorite={() => toggleFavorite(selectedSong)}
+              isFavorite={favorites.some((s) => s?.id === selectedSong?.id)}
+              playlists={playlists}
+              onAddToPlaylist={addToPlaylist}
+              onCreatePlaylist={createPlaylist}
+              onNextSong={handleNextSong}
+              onPreviousSong={handlePreviousSong}
+              isFullscreen={true}
+            />
+          </div>
+        </div>
+      )}
+
       <BottomNav
         activeTab={activeTab}
         onTabChange={handleTabChange}

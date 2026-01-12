@@ -36,14 +36,14 @@ export const searchTracks = async (query, genreId = null, genreName = null) => {
         duration: Math.floor((track.trackTimeMillis || 0) / 1000),
 
         thumbnail: track.artworkUrl100
-          ? track.artworkUrl100.replace("100x100", "600x600")
-          : track.artworkUrl60
-          ? track.artworkUrl60.replace("60x60", "600x600")
-          : null,
+        ? track.artworkUrl100.replace("100x100", "600x600")
+        : track.artworkUrl60
+        ? track.artworkUrl60.replace("60x60", "600x600")
+        : null,
 
-        url: track.trackViewUrl || null,
-        previewUrl: track.previewUrl || null,
-        releaseDate: track.releaseDate || null
+      url: track.trackViewUrl || null,
+      previewUrl: track.previewUrl || null,
+      releaseDate: track.releaseDate || null
       }));
 
     if (genreName) {

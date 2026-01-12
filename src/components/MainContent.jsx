@@ -82,7 +82,7 @@ export default function MainContent({
               key={song.id}
               className={`song-item ${
                 selectedSong === song.id ? "selected" : ""
-              }`}
+              } ${playingSongId === song.id ? "playing" : ""}`}
             >
               <span className="song-number">{index + 1}</span>
               {song.thumbnail && (

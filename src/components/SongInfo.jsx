@@ -12,6 +12,7 @@ export default function SongInfo({
   onCreatePlaylist,
   onNextSong,
   onPreviousSong,
+  isFullscreen = false,
 }) {
   const audioRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
@@ -55,7 +56,6 @@ export default function SongInfo({
     const updateTime = () => {
       setCurrentTime(audio.currentTime);
 
-      // Використовуємо requestAnimationFrame для плавнішого оновлення
       if (!audio.paused && !audio.ended) {
         animationFrameId = requestAnimationFrame(updateTime);
       }
@@ -171,7 +171,8 @@ export default function SongInfo({
 
   return (
     <aside className="song-info">
-      <audio ref={audioRef} />
+      {/* Audio завжди рендериться в першому екземплярі (desktop sidebar), на mobile fullscreen не рендериться */}
+      {!isFullscreen && <audio ref={audioRef} />}
 
       <div className="song-cover">
         {song.thumbnail ? (

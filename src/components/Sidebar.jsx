@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "../styles/scss/sidebar.scss";
+import ConfirmDialog from "./ConfirmDialog";
 
 export default function Sidebar({
   onPlaylistSelect,
@@ -13,6 +14,11 @@ export default function Sidebar({
   const [newPlaylistName, setNewPlaylistName] = useState("");
   const [isCreating, setIsCreating] = useState(false);
   const [selectedPlaylist, setSelectedPlaylist] = useState("favorites");
+  const [confirmDialog, setConfirmDialog] = useState({
+    isOpen: false,
+    playlistId: null,
+    playlistName: "",
+  });
 
   const handlePlaylistClick = (id) => {
     setSelectedPlaylist(id);
@@ -163,9 +169,11 @@ export default function Sidebar({
               className="delete-playlist-btn"
               onClick={(e) => {
                 e.stopPropagation();
-                if (onDeletePlaylist) {
-                  onDeletePlaylist(playlist.id);
-                }
+                setConfirmDialog({
+                  isOpen: true,
+                  playlistId: playlist.id,
+                  playlistName: playlist.name,
+                });
               }}
               aria-label="Видалити плейліст"
             >
@@ -189,6 +197,29 @@ export default function Sidebar({
           </div>
         ))}
       </nav>
+
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        title="Видалення плейліста"
+        message={`Ви впевнені, що хочете видалити плейліст "${confirmDialog.playlistName}"?`}
+        onConfirm={() => {
+          if (onDeletePlaylist) {
+            onDeletePlaylist(confirmDialog.playlistId);
+          }
+          setConfirmDialog({
+            isOpen: false,
+            playlistId: null,
+            playlistName: "",
+          });
+        }}
+        onCancel={() =>
+          setConfirmDialog({
+            isOpen: false,
+            playlistId: null,
+            playlistName: "",
+          })
+        }
+      />
     </aside>
   );
 }
