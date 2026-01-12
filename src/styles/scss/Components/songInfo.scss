@@ -87,12 +87,21 @@
     .playback-buttons {
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 4px;
+      justify-content: space-between;
+      gap: 8px;
+
+      .main-controls {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+      }
     }
 
     .prev-btn,
-    .next-btn {
+    .next-btn,
+    .repeat-btn,
+    .shuffle-btn {
       width: 40px;
       height: 40px;
       border-radius: 50%;
@@ -113,6 +122,32 @@
 
       &:active {
         transform: scale(0.95);
+      }
+    }
+
+    .repeat-btn,
+    .shuffle-btn {
+      width: 32px;
+      height: 32px;
+      border: none;
+
+      &:hover {
+        background: transparent;
+        color: var(--text-primary);
+        opacity: 0.7;
+      }
+
+      &.active {
+        background: transparent;
+        border-color: transparent;
+        color: var(--accent-orange);
+
+        &:hover {
+          background: transparent;
+          border-color: transparent;
+          color: var(--accent-orange);
+          opacity: 0.8;
+        }
       }
     }
 
