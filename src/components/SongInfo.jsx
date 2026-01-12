@@ -171,7 +171,6 @@ export default function SongInfo({
 
   return (
     <aside className="song-info">
-      {/* Audio завжди рендериться в першому екземплярі (desktop sidebar), на mobile fullscreen не рендериться */}
       {!isFullscreen && <audio ref={audioRef} />}
 
       <div className="song-cover">
