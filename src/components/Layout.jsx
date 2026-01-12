@@ -7,9 +7,10 @@ import BottomNav from "./BottomNav.jsx";
 import Input from "./Input.jsx";
 import Profile from "./Profile.jsx";
 import MiniPlayer from "./MiniPlayer.jsx";
+import Footer from "./Footer.jsx";
 import { searchTracks } from "../Scripts/api.js";
-import "../styles/scss/layout.scss";
-import "../styles/scss/searchPage.scss";
+import "../styles/scss/Layout/layout.scss";
+import "../styles/scss/Layout/searchPage.scss";
 
 export default function Layout() {
   const [selectedPlaylist, setSelectedPlaylist] = useState(() => {
@@ -32,6 +33,7 @@ export default function Layout() {
   const [playingSongId, setPlayingSongId] = useState(null);
   const [isFullscreenPlayer, setIsFullscreenPlayer] = useState(false);
   const [isClosingPlayer, setIsClosingPlayer] = useState(false);
+  const [isShuffle, setIsShuffle] = useState(false);
   const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem("todmusic_favorites");
     if (saved) {
@@ -133,11 +135,29 @@ export default function Layout() {
 
     if (currentSongs.length === 0 || !selectedSong) return;
 
-    const currentIndex = currentSongs.findIndex(
-      (s) => s.id === selectedSong.id
-    );
-    if (currentIndex < currentSongs.length - 1) {
-      const nextSong = currentSongs[currentIndex + 1];
+    let nextSong;
+    if (isShuffle) {
+      // Випадковий вибір треку (не поточний)
+      const availableSongs = currentSongs.filter(
+        (s) => s.id !== selectedSong.id
+      );
+      if (availableSongs.length > 0) {
+        const randomIndex = Math.floor(Math.random() * availableSongs.length);
+        nextSong = availableSongs[randomIndex];
+      } else {
+        nextSong = currentSongs[0];
+      }
+    } else {
+      // Звичайний послідовний вибір
+      const currentIndex = currentSongs.findIndex(
+        (s) => s.id === selectedSong.id
+      );
+      if (currentIndex < currentSongs.length - 1) {
+        nextSong = currentSongs[currentIndex + 1];
+      }
+    }
+
+    if (nextSong) {
       setSelectedSong(nextSong);
       setPlayingSongId(nextSong.id);
     }
@@ -326,46 +346,53 @@ export default function Layout() {
           onCreatePlaylist={createPlaylist}
           onDeletePlaylist={handleDeletePlaylist}
         />
-        {showSearch ? (
-          <div className="search-page">
-            {isSearching && <div className="loading">Пошук...</div>}
-            {searchError && <div className="error">{searchError}</div>}
-            {!isSearching &&
-              !searchError &&
-              searchResults.length === 0 &&
-              searchQuery && (
-                <div className="no-results">
-                  Нічого не знайдено для "{searchQuery}"
+        <div className="app-content-wrapper">
+          {showSearch ? (
+            <div className="search-page">
+              {isSearching && <div className="loading">Пошук...</div>}
+              {searchError && <div className="error">{searchError}</div>}
+              {!isSearching &&
+                !searchError &&
+                searchResults.length === 0 &&
+                searchQuery && (
+                  <div className="no-results">
+                    Нічого не знайдено для "{searchQuery}"
+                  </div>
+                )}
+              {!searchQuery && (
+                <div className="search-prompt">
+                  Введіть запит у поле пошуку вгорі
                 </div>
               )}
-            {!searchQuery && (
-              <div className="search-prompt">
-                Введіть запит у поле пошуку вгорі
-              </div>
-            )}
+              <MainContent
+                playlistId={null}
+                onSongSelect={handleSongSelect}
+                searchResults={searchResults}
+                isSearchMode={true}
+                playingSongId={playingSongId}
+                onPlayPause={handlePlayPause}
+              />
+            </div>
+          ) : showProfile ? (
+            <Profile
+              onBackClick={handleHomeClick}
+              playlists={playlists}
+              favorites={favorites}
+            />
+          ) : (
             <MainContent
-              playlistId={null}
+              playlistId={selectedPlaylist}
               onSongSelect={handleSongSelect}
-              searchResults={searchResults}
-              isSearchMode={true}
+              searchResults={[]}
+              isSearchMode={false}
               playingSongId={playingSongId}
               onPlayPause={handlePlayPause}
+              playlists={playlists}
+              favorites={favorites}
             />
-          </div>
-        ) : showProfile ? (
-          <Profile onBackClick={handleHomeClick} />
-        ) : (
-          <MainContent
-            playlistId={selectedPlaylist}
-            onSongSelect={handleSongSelect}
-            searchResults={[]}
-            isSearchMode={false}
-            playingSongId={playingSongId}
-            onPlayPause={handlePlayPause}
-            playlists={playlists}
-            favorites={favorites}
-          />
-        )}
+          )}
+          <Footer />
+        </div>
         <SongInfo
           song={selectedSong}
           isPlaying={playingSongId === selectedSong?.id}
@@ -377,6 +404,8 @@ export default function Layout() {
           onCreatePlaylist={createPlaylist}
           onNextSong={handleNextSong}
           onPreviousSong={handlePreviousSong}
+          isShuffle={isShuffle}
+          onShuffleToggle={() => setIsShuffle(!isShuffle)}
         />
       </div>
 
@@ -459,6 +488,8 @@ export default function Layout() {
               onNextSong={handleNextSong}
               onPreviousSong={handlePreviousSong}
               isFullscreen={true}
+              isShuffle={isShuffle}
+              onShuffleToggle={() => setIsShuffle(!isShuffle)}
             />
           </div>
         </div>

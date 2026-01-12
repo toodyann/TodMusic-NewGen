@@ -1,4 +1,4 @@
-import "../styles/scss/miniPlayer.scss";
+import "../styles/scss/Components/miniPlayer.scss";
 
 export default function MiniPlayer({ song, isPlaying, onPlayPause, onExpand }) {
   if (!song) return null;

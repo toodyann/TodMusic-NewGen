@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/scss/sidebar.scss";
+import "../styles/scss/Components/sidebar.scss";
 import ConfirmDialog from "./ConfirmDialog";
 
 export default function Sidebar({

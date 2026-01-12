@@ -1,4 +1,4 @@
-import "../styles/scss/bottomNav.scss";
+import "../styles/scss/Navigation/bottomNav.scss";
 
 export default function BottomNav({ activeTab, onTabChange, onSearchClick }) {
   return (
