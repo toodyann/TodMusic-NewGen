@@ -25,9 +25,32 @@ export default function SongInfo({
   const [newPlaylistName, setNewPlaylistName] = useState("");
   const [isRepeat, setIsRepeat] = useState(false);
 
+  // Якщо fullscreen, використовуємо існуючий audio елемент
+  useEffect(() => {
+    if (isFullscreen) {
+      const existingAudio = document.querySelector(".song-info audio");
+      if (existingAudio) {
+        audioRef.current = existingAudio;
+        // Отримуємо поточний стан audio
+        if (existingAudio.duration) {
+          setDuration(existingAudio.duration);
+        }
+        if (existingAudio.currentTime) {
+          setCurrentTime(existingAudio.currentTime);
+        }
+      }
+    }
+  }, [isFullscreen]);
+
   useEffect(() => {
     if (song && song.previewUrl && audioRef.current) {
       const audio = audioRef.current;
+
+      // Якщо fullscreen і audio вже грає цю пісню, не перезавантажуємо
+      if (isFullscreen && audio.src.includes(song.previewUrl)) {
+        return;
+      }
+
       audio.src = song.previewUrl;
       audio.load();
       setCurrentTime(0);
@@ -37,7 +60,7 @@ export default function SongInfo({
         audio.play().catch((err) => console.error("Play error:", err));
       }
     }
-  }, [song, isPlaying]);
+  }, [song, isPlaying, isFullscreen]);
 
   useEffect(() => {
     const audio = audioRef.current;

@@ -7,10 +7,13 @@
 
   /* Input styles */
   --input-bg: #f5f5f5;
-  --input-border: #d0d0d0;
+  --input-border: #333333;
   --input-border-focus: #000000;
   --input-text: #000000;
   --input-placeholder: #999999;
+
+  /* Playlist icon background */
+  --playlist-icon-bg: #d0d0d0;
 }
 
 [data-theme="dark"] {
@@ -26,4 +29,7 @@
   --input-border-focus: #ffffff;
   --input-text: #ffffff;
   --input-placeholder: #666666;
+
+  /* Playlist icon background */
+  --playlist-icon-bg: #333333;
 }

@@ -118,7 +118,7 @@
     padding: 8px 0;
 
     &::-webkit-scrollbar {
-      width: 6px;
+      width: 3px;
     }
 
     &::-webkit-scrollbar-track {
@@ -165,13 +165,14 @@
       background: var(--input-bg);
       border-left: 3px solid var(--accent-orange);
       padding-left: 21px;
+      border-radius: 1rem;
     }
 
     .playlist-icon {
       width: 40px;
       height: 40px;
       border-radius: 8px;
-      background: var(--input-border);
+      background: var(--playlist-icon-bg);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -253,36 +254,87 @@
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;
-    height: calc(100dvh - 64px);
-    bottom: 64px;
+    height: auto;
+    position: static;
+    transform: none;
+    bottom: auto;
+    padding: 16px 16px 80px;
+    border: none;
+    box-shadow: none;
+
+    &.open {
+      transform: none;
+    }
 
     .sidebar-header {
-      padding: 0 16px 12px;
+      padding: 0 0 16px;
+      position: static;
+      margin-bottom: 16px;
 
       h2 {
-        font-size: 1.125rem;
+        font-size: 1.5rem;
       }
 
       .close-sidebar-btn {
-        display: flex;
+        display: none;
+      }
+    }
+
+    .create-playlist-form {
+      padding: 16px 0;
+      margin-bottom: 16px;
+
+      input {
+        font-size: 1rem;
+        padding: 12px 16px;
+      }
+
+      .create-btn,
+      .cancel-btn {
+        padding: 12px 16px;
+        font-size: 1rem;
+      }
+    }
+
+    .playlist-nav {
+      gap: 8px;
+    }
+
+    .playlist-item-wrapper {
+      .delete-playlist-btn {
+        width: 40px;
+        height: 40px;
+        opacity: 1;
+
+        svg {
+          width: 20px;
+          height: 20px;
+        }
       }
     }
 
     .playlist-item {
-      padding: 10px 16px;
+      padding: 14px 16px;
+      font-size: 1rem;
 
       .playlist-icon {
-        width: 36px;
-        height: 36px;
+        width: 44px;
+        height: 44px;
+
+        svg {
+          width: 22px;
+          height: 22px;
+        }
       }
 
       .playlist-info {
         .playlist-name {
-          font-size: 0.875rem;
+          font-size: 1rem;
+          font-weight: 500;
         }
 
         .playlist-count {
-          font-size: 0.75rem;
+          font-size: 0.875rem;
         }
       }
     }
