@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/scss/mainContent.scss";
+import "../styles/scss/Components/mainContent.scss";
 
 export default function MainContent({
   playlistId,

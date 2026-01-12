@@ -1,4 +1,4 @@
-import "../styles/scss/confirmDialog.scss";
+import "../styles/scss/Components/confirmDialog.scss";
 
 export default function ConfirmDialog({
   isOpen,

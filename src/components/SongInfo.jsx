@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from "react";
-import "../styles/scss/songInfo.scss";
+import "../styles/scss/Components/songInfo.scss";
 
 export default function SongInfo({
   song,
@@ -13,6 +13,8 @@ export default function SongInfo({
   onNextSong,
   onPreviousSong,
   isFullscreen = false,
+  isShuffle = false,
+  onShuffleToggle,
 }) {
   const audioRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
@@ -21,6 +23,7 @@ export default function SongInfo({
   const [isMuted, setIsMuted] = useState(false);
   const [showPlaylistMenu, setShowPlaylistMenu] = useState(false);
   const [newPlaylistName, setNewPlaylistName] = useState("");
+  const [isRepeat, setIsRepeat] = useState(false);
 
   useEffect(() => {
     if (song && song.previewUrl && audioRef.current) {
@@ -76,7 +79,17 @@ export default function SongInfo({
       if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
       }
-      if (onPlayPause) onPlayPause();
+      if (isRepeat) {
+        audio.currentTime = 0;
+        audio.play().catch((err) => console.error("Play error:", err));
+      } else {
+        // Переходимо до наступної пісні
+        if (onNextSong) {
+          onNextSong();
+        } else if (onPlayPause) {
+          onPlayPause();
+        }
+      }
     };
 
     audio.addEventListener("play", handlePlay);
@@ -95,7 +108,7 @@ export default function SongInfo({
       audio.removeEventListener("loadedmetadata", updateDuration);
       audio.removeEventListener("ended", handleEnded);
     };
-  }, [onPlayPause]);
+  }, [onPlayPause, isRepeat, onNextSong]);
 
   const togglePlay = () => {
     if (onPlayPause) {
@@ -205,50 +218,101 @@ export default function SongInfo({
       {song.previewUrl && (
         <div className="player-controls">
           <div className="playback-buttons">
-            <button className="prev-btn" onClick={onPreviousSong}>
+            <button
+              className={`shuffle-btn ${isShuffle ? "active" : ""}`}
+              onClick={onShuffleToggle}
+              title={
+                isShuffle ? "Вимкнути перемішування" : "Увімкнути перемішування"
+              }
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
-                fill="currentColor"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
+                <polyline points="16 3 21 3 21 8"></polyline>
+                <line x1="4" y1="20" x2="21" y2="3"></line>
+                <polyline points="21 16 21 21 16 21"></polyline>
+                <line x1="15" y1="15" x2="21" y2="21"></line>
+                <line x1="4" y1="4" x2="9" y2="9"></line>
               </svg>
             </button>
-            <button className="play-btn-large" onClick={togglePlay}>
-              {isPlaying ? (
+
+            <div className="main-controls">
+              <button className="prev-btn" onClick={onPreviousSong}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="32"
-                  height="32"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
-                  <rect x="6" y="4" width="4" height="16" rx="1" />
-                  <rect x="14" y="4" width="4" height="16" rx="1" />
+                  <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z" />
                 </svg>
-              ) : (
+              </button>
+              <button className="play-btn-large" onClick={togglePlay}>
+                {isPlaying ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <rect x="6" y="4" width="4" height="16" rx="1" />
+                    <rect x="14" y="4" width="4" height="16" rx="1" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="32"
+                    height="32"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                )}
+              </button>
+              <button className="next-btn" onClick={onNextSong}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="32"
-                  height="32"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                   fill="currentColor"
                 >
-                  <path d="M8 5v14l11-7z" />
+                  <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
                 </svg>
-              )}
-            </button>
-            <button className="next-btn" onClick={onNextSong}>
+              </button>
+            </div>
+
+            <button
+              className={`repeat-btn ${isRepeat ? "active" : ""}`}
+              onClick={() => setIsRepeat(!isRepeat)}
+              title={isRepeat ? "Вимкнути повтор" : "Увімкнути повтор"}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
+                width="20"
+                height="20"
                 viewBox="0 0 24 24"
-                fill="currentColor"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
               >
-                <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z" />
+                <polyline points="17 1 21 5 17 9"></polyline>
+                <path d="M3 11V9a4 4 0 0 1 4-4h14"></path>
+                <polyline points="7 23 3 19 7 15"></polyline>
+                <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
               </svg>
             </button>
           </div>
