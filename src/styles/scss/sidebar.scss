@@ -55,6 +55,63 @@
     }
   }
 
+  .create-playlist-form {
+    padding: 16px 24px;
+    border-bottom: 1px solid var(--input-border);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    input {
+      padding: 10px 12px;
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      border-radius: 6px;
+      color: var(--text-primary);
+      font-size: 0.875rem;
+      outline: none;
+      transition: all 0.2s ease;
+
+      &:focus {
+        border-color: var(--text-primary);
+      }
+
+      &::placeholder {
+        color: var(--text-secondary);
+      }
+    }
+
+    .create-btn,
+    .cancel-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .create-btn {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+
+      &:hover {
+        opacity: 0.9;
+      }
+    }
+
+    .cancel-btn {
+      background: transparent;
+      color: var(--text-secondary);
+      border: 1px solid var(--input-border);
+
+      &:hover {
+        background: var(--input-bg);
+      }
+    }
+  }
+
   .playlist-nav {
     flex: 1;
     overflow-y: auto;
@@ -78,6 +135,16 @@
     }
   }
 
+  .playlist-item-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+
+    &:hover .delete-playlist-btn {
+      opacity: 1;
+    }
+  }
+
   .playlist-item {
     width: 100%;
     display: flex;
@@ -96,7 +163,7 @@
 
     &.active {
       background: var(--input-bg);
-      border-left: 3px solid var(--text-primary);
+      border-left: 3px solid var(--accent-orange);
       padding-left: 21px;
     }
 
@@ -132,6 +199,33 @@
         font-size: 0.8125rem;
         color: var(--text-secondary);
       }
+    }
+  }
+
+  .delete-playlist-btn {
+    position: absolute;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    background: var(--bg-primary);
+    border: 1px solid var(--input-border);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-secondary);
+    opacity: 0;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #ff4444;
+      border-color: #ff4444;
+      color: white;
+    }
+
+    &:active {
+      transform: scale(0.95);
     }
   }
 }

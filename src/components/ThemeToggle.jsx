@@ -10,6 +10,7 @@ function ThemeToggle() {
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
+    console.log("Theme set to:", theme); // Для дебагу
   }, [theme]);
 
   const toggleTheme = () => {

@@ -1,49 +1,35 @@
 import { useState } from "react";
 import "../styles/scss/mainContent.scss";
 
-export default function MainContent({ playlistId, onSongSelect }) {
-  const [allSongs] = useState([
-    {
-      id: 1,
-      title: "Bohemian Rhapsody",
-      artist: "Queen",
-      album: "A Night at the Opera",
-      duration: "5:55",
-    },
-    {
-      id: 2,
-      title: "Stairway to Heaven",
-      artist: "Led Zeppelin",
-      album: "Led Zeppelin IV",
-      duration: "8:02",
-    },
-    {
-      id: 3,
-      title: "Hotel California",
-      artist: "Eagles",
-      album: "Hotel California",
-      duration: "6:30",
-    },
-    {
-      id: 4,
-      title: "Smells Like Teen Spirit",
-      artist: "Nirvana",
-      album: "Nevermind",
-      duration: "5:01",
-    },
-    {
-      id: 5,
-      title: "Imagine",
-      artist: "John Lennon",
-      album: "Imagine",
-      duration: "3:03",
-    },
-  ]);
+export default function MainContent({
+  playlistId,
+  onSongSelect,
+  searchResults = [],
+  isSearchMode = false,
+  playingSongId = null,
+  onPlayPause,
+  playlists = [],
+  favorites = [],
+}) {
+  const [allSongs] = useState([]);
 
-  const songs = playlistId === null ? allSongs : [];
+  const songs = isSearchMode
+    ? searchResults
+    : playlistId === "favorites"
+    ? favorites
+    : playlistId
+    ? playlists.find((p) => p.id === playlistId)?.songs || []
+    : [];
+
+  console.log("MainContent render:", {
+    playlistId,
+    isSearchMode,
+    songsCount: songs.length,
+    playlistsCount: playlists.length,
+    favoritesCount: favorites.length,
+  });
 
   const [selectedSong, setSelectedSong] = useState(null);
-  const [playingSong, setPlayingSong] = useState(null);
 
   const handleSongClick = (song) => {
     setSelectedSong(song.id);
@@ -52,133 +38,97 @@ export default function MainContent({ playlistId, onSongSelect }) {
     }
   };
 
-  const handlePlayPause = (song) => {
-    if (playingSong === song.id) {
-      setPlayingSong(null);
-    } else {
-      setPlayingSong(song.id);
-      setSelectedSong(song.id);
-      if (onSongSelect) {
-        onSongSelect(song);
-      }
+  const handlePlayPause = (song, e) => {
+    e.stopPropagation();
+    if (onPlayPause) {
+      onPlayPause(song.id);
+    }
+    if (onSongSelect) {
+      onSongSelect(song);
     }
   };
 
   return (
     <main className="main-content">
-      <div className="content-header">
-        <h1>{playlistId === null ? "Усі пісні" : "Плейліст"}</h1>
-        {songs.length > 0 && (
-          <div className="content-actions">
-            <button className="play-all-btn">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-              >
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-              </svg>
-              Відтворити все
-            </button>
-          </div>
-        )}
-      </div>
-
       {songs.length === 0 ? (
         <div className="no-songs">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="64"
-            height="64"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <path d="M9 18V5l12-2v13"></path>
-            <circle cx="6" cy="18" r="3"></circle>
-            <circle cx="18" cy="16" r="3"></circle>
-          </svg>
-          <p>Цей плейліст порожній</p>
-        </div>
-      ) : (
-        <div className="songs-list">
-          {songs.length > 0 && (
-            <>
-              <div className="songs-header">
-                <div className="col-number">#</div>
-                <div className="col-title">Назва</div>
-                <div className="col-album">Альбом</div>
-                <div className="col-duration">Тривалість</div>
-              </div>
-
-              {songs.map((song, index) => (
-                <div
-                  key={song.id}
-                  className={`song-item ${
-                    selectedSong === song.id ? "selected" : ""
-                  } ${playingSong === song.id ? "playing" : ""}`}
-                  onClick={() => handleSongClick(song)}
-                >
-                  <div className="col-number">
-                    {playingSong === song.id ? (
-                      <button
-                        className="play-btn active"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handlePlayPause(song);
-                        }}
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                        >
-                          <rect x="6" y="4" width="4" height="16"></rect>
-                          <rect x="14" y="4" width="4" height="16"></rect>
-                        </svg>
-                      </button>
-                    ) : (
-                      <button
-                        className="play-btn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handlePlayPause(song);
-                        }}
-                      >
-                        <span className="number">{index + 1}</span>
-                        <svg
-                          className="play-icon"
-                          xmlns="http://www.w3.org/2000/svg"
-                          width="16"
-                          height="16"
-                          viewBox="0 0 24 24"
-                          fill="currentColor"
-                        >
-                          <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                        </svg>
-                      </button>
-                    )}
-                  </div>
-                  <div className="col-title">
-                    <div className="song-info">
-                      <span className="song-title">{song.title}</span>
-                      <span className="song-artist">{song.artist}</span>
-                    </div>
-                  </div>
-                  <div className="col-album">{song.album}</div>
-                  <div className="col-duration">{song.duration}</div>
-                </div>
-              ))}
-            </>
+          {isSearchMode ? (
+            <p>Введіть запит для пошуку</p>
+          ) : playlistId === null ? (
+            <div className="search-hint">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="64"
+                height="64"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+              >
+                <circle cx="11" cy="11" r="8"></circle>
+                <path d="m21 21-4.35-4.35"></path>
+              </svg>
+              <h3>Знайдіть свою музику</h3>
+              <p>Використовуйте пошук вгорі, щоб знайти улюблені треки</p>
+            </div>
+          ) : (
+            <p>У цьому плейлісті ще немає треків</p>
           )}
         </div>
+      ) : (
+        <ul className="song-list">
+          {songs.map((song, index) => (
+            <li
+              key={song.id}
+              className={`song-item ${
+                selectedSong === song.id ? "selected" : ""
+              }`}
+            >
+              <span className="song-number">{index + 1}</span>
+              {song.thumbnail && (
+                <img
+                  src={song.thumbnail}
+                  alt={song.title}
+                  className="song-thumbnail"
+                />
+              )}
+              <div className="song-info" onClick={() => handleSongClick(song)}>
+                <span className="song-title">{song.title}</span>
+                <span className="song-artist">{song.artist}</span>
+                {song.album && <span className="song-album">{song.album}</span>}
+              </div>
+              <button
+                className={`play-pause-btn ${
+                  playingSongId === song.id ? "playing" : ""
+                }`}
+                onClick={(e) => handlePlayPause(song, e)}
+              >
+                {playingSongId === song.id ? (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <rect x="6" y="4" width="4" height="16" rx="1" />
+                    <rect x="14" y="4" width="4" height="16" rx="1" />
+                  </svg>
+                ) : (
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                  >
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                )}
+              </button>
+            </li>
+          ))}
+        </ul>
       )}
     </main>
   );

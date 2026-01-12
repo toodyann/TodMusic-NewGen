@@ -2,7 +2,39 @@
   flex: 1;
   padding: 24px 32px;
   overflow-y: auto;
-  display: none;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+
+  .loading,
+  .error,
+  .no-results,
+  .search-prompt {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 1rem;
+    color: var(--text-secondary);
+    border-radius: 12px;
+    background: var(--input-bg);
+  }
+
+  .error {
+    color: #ff4444;
+    background: rgba(255, 68, 68, 0.1);
+  }
+
+  .loading {
+    color: var(--text-primary);
+  }
+
+  .search-prompt {
+    font-size: 1.125rem;
+    padding: 60px 20px;
+  }
+
+  .no-results {
+    font-style: italic;
+  }
 }
 
 @media (max-width: 768px) {

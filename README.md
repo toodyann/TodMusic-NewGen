@@ -72,32 +72,6 @@ The application features a robust theme system with two modes:
 
 Themes are automatically saved to localStorage and persist across sessions.
 
-## 📁 Project Structure
-
-```
-TodMusic NewGen/
-├── public/              # Static assets
-├── src/
-│   ├── assets/         # Images and media files
-│   ├── components/     # React components
-│   │   ├── Header.jsx
-│   │   ├── Logo.jsx
-│   │   ├── Input.jsx
-│   │   └── ThemeToggle.jsx
-│   ├── styles/
-│   │   └── scss/
-│   │       ├── Header/ # Header component styles
-│   │       ├── fonts.scss
-│   │       ├── header.scss
-│   │       ├── main.scss
-│   │       ├── reset.scss
-│   │       └── variables.scss
-│   └── main.jsx        # Application entry point
-├── index.html
-├── package.json
-└── vite.config.js
-```
-
 ## 🎯 Component Overview
 
 ### Header Component

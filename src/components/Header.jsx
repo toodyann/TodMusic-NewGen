@@ -1,6 +1,5 @@
 import Logo from "./Logo.jsx";
 import Input from "./Input.jsx";
-import ThemeToggle from "./ThemeToggle.jsx";
 import "../styles/scss/header.scss";
 
 export default function Header({
@@ -9,6 +8,7 @@ export default function Header({
   onSearchChange,
   onHomeClick,
   onMenuClick,
+  onProfileClick,
 }) {
   return (
     <header className="app-header">
@@ -53,7 +53,22 @@ export default function Header({
         onChange={(e) => onSearchChange(e.target.value)}
         onSearch={onSearch}
       />
-      <ThemeToggle />
+      <button className="profile-btn" onClick={onProfileClick}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+      </button>
     </header>
   );
 }
