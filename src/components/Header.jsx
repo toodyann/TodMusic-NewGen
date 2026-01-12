@@ -11,6 +11,10 @@ export default function Header({
   onHomeClick,
   onMenuClick,
   onProfileClick,
+  onSettingsClick,
+  activeTab,
+  isMobile,
+  selectedPlaylist,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -36,6 +40,19 @@ export default function Header({
     onProfileClick();
   };
 
+  const handleSettingsMenuClick = () => {
+    setIsMenuOpen(false);
+    onSettingsClick();
+  };
+
+  const showSearch =
+    !isMobile ||
+    (activeTab !== "playlists" &&
+      activeTab !== "profile" &&
+      activeTab !== "settings" &&
+      !selectedPlaylist &&
+      (activeTab === "home" || activeTab === "search"));
+
   return (
     <header className="app-header">
       <button className="burger-btn" onClick={onMenuClick}>
@@ -56,13 +73,15 @@ export default function Header({
         </svg>
       </button>
       <Logo />
-      <Input
-        placeholder="Пошук музики..."
-        value={searchValue}
-        onChange={(e) => onSearchChange(e.target.value)}
-        onSearch={onSearch}
-        onHomeClick={onHomeClick}
-      />
+      {showSearch && (
+        <Input
+          placeholder="Пошук музики..."
+          value={searchValue}
+          onChange={(e) => onSearchChange(e.target.value)}
+          onSearch={onSearch}
+          onHomeClick={onHomeClick}
+        />
+      )}
       <div className="profile-menu-container" ref={menuRef}>
         <button
           className={`profile-btn ${isMenuOpen ? "active" : ""}`}
@@ -104,7 +123,7 @@ export default function Header({
               <span>Профіль</span>
             </button>
             <div className="dropdown-divider"></div>
-            <div className="dropdown-item theme-toggle-item">
+            <button className="dropdown-item" onClick={handleSettingsMenuClick}>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="20"
@@ -119,9 +138,8 @@ export default function Header({
                 <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
-              <span>Тема</span>
-              <ThemeToggle />
-            </div>
+              <span>Налаштування</span>
+            </button>
             <div className="dropdown-divider"></div>
             <button className="dropdown-item">
               <svg

@@ -5,6 +5,10 @@
   display: flex;
   align-items: center;
   padding: 32px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
 }
 
 .main_logo {
@@ -21,4 +25,7 @@
 .logo_image {
   width: 2.5rem;
   height: 2.5rem;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
 }

@@ -20,7 +20,7 @@
   }
 
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 3px;
   }
 
   &::-webkit-scrollbar-track {
@@ -332,6 +332,7 @@
       .meta-label {
         font-size: 0.875rem;
         color: var(--text-secondary);
+        margin-right: 1rem;
       }
 
       .meta-value {

@@ -6,6 +6,7 @@ import SongInfo from "./SongInfo.jsx";
 import BottomNav from "./BottomNav.jsx";
 import Input from "./Input.jsx";
 import Profile from "./Profile.jsx";
+import Settings from "./Settings.jsx";
 import MiniPlayer from "./MiniPlayer.jsx";
 import Footer from "./Footer.jsx";
 import { searchTracks } from "../Scripts/api.js";
@@ -18,6 +19,7 @@ export default function Layout() {
     return saved ? JSON.parse(saved) : null;
   });
   const [selectedSong, setSelectedSong] = useState(null);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const [searchQuery, setSearchQuery] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [activeTab, setActiveTab] = useState(() => {
@@ -27,6 +29,7 @@ export default function Layout() {
   const [showPlaylists, setShowPlaylists] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showProfile, setShowProfile] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
   const [searchError, setSearchError] = useState(null);
@@ -39,7 +42,6 @@ export default function Layout() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Оновлюємо URL картинок до 600x600
         return parsed.map((song) => ({
           ...song,
           thumbnail: song.thumbnail
@@ -105,11 +107,21 @@ export default function Layout() {
     localStorage.setItem("todmusic_activeTab", activeTab);
   }, [activeTab]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handlePlaylistSelect = (playlistId) => {
     setSelectedPlaylist(playlistId);
     setSidebarOpen(false);
     setShowSearch(false);
     setShowProfile(false);
+    setShowSettings(false);
     setActiveTab("playlists");
   };
 
@@ -137,7 +149,6 @@ export default function Layout() {
 
     let nextSong;
     if (isShuffle) {
-      // Випадковий вибір треку (не поточний)
       const availableSongs = currentSongs.filter(
         (s) => s.id !== selectedSong.id
       );
@@ -148,7 +159,6 @@ export default function Layout() {
         nextSong = currentSongs[0];
       }
     } else {
-      // Звичайний послідовний вибір
       const currentIndex = currentSongs.findIndex(
         (s) => s.id === selectedSong.id
       );
@@ -244,12 +254,22 @@ export default function Layout() {
     setShowProfile(true);
     setShowSearch(false);
     setShowPlaylists(false);
+    setShowSettings(false);
+    setSidebarOpen(false);
+  };
+
+  const handleSettingsClick = () => {
+    setActiveTab("settings");
+    setShowSettings(true);
+    setShowProfile(false);
+    setShowSearch(false);
+    setShowPlaylists(false);
+    setSidebarOpen(false);
   };
 
   const handleSearch = async (query) => {
     setSearchQuery(query);
 
-    // Автоматично активуємо режим пошуку
     setShowSearch(true);
     setShowPlaylists(false);
     setShowProfile(false);
@@ -282,6 +302,7 @@ export default function Layout() {
     setShowProfile(false);
     setShowSearch(false);
     setShowPlaylists(false);
+    setShowSettings(false);
     setActiveTab("home");
   };
 
@@ -293,6 +314,11 @@ export default function Layout() {
     setSidebarOpen(false);
   };
 
+  const handleBackToPlaylists = () => {
+    setSelectedPlaylist(null);
+    setActiveTab("playlists");
+  };
+
   const handleTabChange = (tab) => {
     setActiveTab(tab);
     if (tab === "home") {
@@ -300,19 +326,27 @@ export default function Layout() {
       setShowPlaylists(false);
       setShowSearch(false);
       setShowProfile(false);
+      setShowSettings(false);
+      setSidebarOpen(false);
     } else if (tab === "playlists") {
       setShowPlaylists(true);
       setShowSearch(false);
       setShowProfile(false);
+      setShowSettings(false);
       setSidebarOpen(true);
+      setSelectedPlaylist(null);
     } else if (tab === "search") {
       setShowSearch(true);
       setShowPlaylists(false);
       setShowProfile(false);
+      setShowSettings(false);
+      setSidebarOpen(false);
     } else if (tab === "profile") {
       setShowProfile(true);
       setShowSearch(false);
       setShowPlaylists(false);
+      setShowSettings(false);
+      setSidebarOpen(false);
     }
   };
 
@@ -321,6 +355,8 @@ export default function Layout() {
     setShowSearch(true);
     setShowPlaylists(false);
     setShowProfile(false);
+    setShowSettings(false);
+    setSidebarOpen(false);
   };
 
   return (
@@ -332,22 +368,28 @@ export default function Layout() {
         onHomeClick={handleHomeClick}
         onMenuClick={toggleSidebar}
         onProfileClick={handleProfileClick}
+        onSettingsClick={handleSettingsClick}
+        activeTab={activeTab}
+        isMobile={isMobile}
+        selectedPlaylist={selectedPlaylist}
       />
       <div className="app-body">
-        {sidebarOpen && (
+        {sidebarOpen && !isMobile && (
           <div className="sidebar-overlay" onClick={closeSidebar} />
         )}
-        <Sidebar
-          onPlaylistSelect={handlePlaylistSelect}
-          isOpen={sidebarOpen}
-          onClose={closeSidebar}
-          playlists={playlists}
-          favorites={favorites}
-          onCreatePlaylist={createPlaylist}
-          onDeletePlaylist={handleDeletePlaylist}
-        />
+        {(!isMobile || (activeTab === "playlists" && !selectedPlaylist)) && (
+          <Sidebar
+            onPlaylistSelect={handlePlaylistSelect}
+            isOpen={sidebarOpen}
+            onClose={closeSidebar}
+            playlists={playlists}
+            favorites={favorites}
+            onCreatePlaylist={createPlaylist}
+            onDeletePlaylist={handleDeletePlaylist}
+          />
+        )}
         <div className="app-content-wrapper">
-          {showSearch ? (
+          {activeTab === "search" || showSearch ? (
             <div className="search-page">
               {isSearching && <div className="loading">Пошук...</div>}
               {searchError && <div className="error">{searchError}</div>}
@@ -373,13 +415,17 @@ export default function Layout() {
                 onPlayPause={handlePlayPause}
               />
             </div>
-          ) : showProfile ? (
+          ) : activeTab === "profile" || showProfile ? (
             <Profile
               onBackClick={handleHomeClick}
               playlists={playlists}
               favorites={favorites}
             />
-          ) : (
+          ) : activeTab === "settings" || showSettings ? (
+            <Settings onBackClick={handleHomeClick} />
+          ) : isMobile &&
+            activeTab === "playlists" &&
+            !selectedPlaylist ? null : (
             <MainContent
               playlistId={selectedPlaylist}
               onSongSelect={handleSongSelect}
@@ -389,6 +435,8 @@ export default function Layout() {
               onPlayPause={handlePlayPause}
               playlists={playlists}
               favorites={favorites}
+              isMobile={isMobile}
+              onBackToPlaylists={handleBackToPlaylists}
             />
           )}
           <Footer />

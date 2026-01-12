@@ -10,9 +10,9 @@ export default function MainContent({
   onPlayPause,
   playlists = [],
   favorites = [],
+  isMobile = false,
+  onBackToPlaylists,
 }) {
-  const [allSongs] = useState([]);
-
   const songs = isSearchMode
     ? searchResults
     : playlistId === "favorites"
@@ -21,15 +21,14 @@ export default function MainContent({
     ? playlists.find((p) => p.id === playlistId)?.songs || []
     : [];
 
-  console.log("MainContent render:", {
-    playlistId,
-    isSearchMode,
-    songsCount: songs.length,
-    playlistsCount: playlists.length,
-    favoritesCount: favorites.length,
-  });
-
   const [selectedSong, setSelectedSong] = useState(null);
+
+  const formatDuration = (seconds) => {
+    if (!seconds) return "0:00";
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
 
   const handleSongClick = (song) => {
     setSelectedSong(song.id);
@@ -48,8 +47,36 @@ export default function MainContent({
     }
   };
 
+  const getPlaylistName = () => {
+    if (playlistId === "favorites") return "Улюблені";
+    const playlist = playlists.find((p) => p.id === playlistId);
+    return playlist?.name || "";
+  };
+
   return (
     <main className="main-content">
+      {isMobile && playlistId && onBackToPlaylists && (
+        <div className="mobile-playlist-header">
+          <button className="back-to-playlists-btn" onClick={onBackToPlaylists}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            <span>Назад</span>
+          </button>
+          <h2 className="playlist-title">{getPlaylistName()}</h2>
+        </div>
+      )}
       {songs.length === 0 ? (
         <div className="no-songs">
           {isSearchMode ? (
@@ -97,6 +124,9 @@ export default function MainContent({
                 <span className="song-artist">{song.artist}</span>
                 {song.album && <span className="song-album">{song.album}</span>}
               </div>
+              <span className="song-duration">
+                {formatDuration(song.duration || 0)}
+              </span>
               <button
                 className={`play-pause-btn ${
                   playingSongId === song.id ? "playing" : ""

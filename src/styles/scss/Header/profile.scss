@@ -7,7 +7,7 @@
   width: 100%;
 
   &::-webkit-scrollbar {
-    width: 8px;
+    width: 3px;
   }
 
   &::-webkit-scrollbar-track {
@@ -327,9 +327,18 @@
 @media (max-width: 768px) {
   .profile-page {
     padding: 16px;
+    padding-bottom: 80px;
+    max-width: 100%;
 
     .profile-header {
       margin-bottom: 24px;
+
+      .back-btn {
+        position: static;
+        margin-bottom: 16px;
+        width: 100%;
+        justify-content: center;
+      }
 
       .profile-avatar {
         width: 100px;
@@ -350,6 +359,10 @@
       margin-bottom: 24px;
       padding-bottom: 16px;
 
+      h3 {
+        font-size: 1rem;
+      }
+
       .stats-grid {
         grid-template-columns: 1fr;
         gap: 12px;
@@ -357,6 +370,35 @@
         .stat-item {
           padding: 12px;
         }
+      }
+    }
+
+    .login-form,
+    .profile-actions {
+      .form-group {
+        margin-bottom: 16px;
+
+        label {
+          font-size: 0.875rem;
+        }
+
+        input {
+          font-size: 1rem;
+          padding: 12px;
+        }
+      }
+
+      button[type="submit"],
+      .btn {
+        padding: 12px;
+        font-size: 1rem;
+      }
+    }
+
+    .logout-section {
+      .logout-btn {
+        padding: 12px;
+        font-size: 1rem;
       }
     }
   }
