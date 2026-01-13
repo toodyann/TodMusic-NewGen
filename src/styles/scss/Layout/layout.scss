@@ -1,3 +1,13 @@
+@keyframes backgroundFloat {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.1) rotate(3deg);
+  }
+}
+
 @keyframes scrollbar-pulse {
   0% {
     background-position: 0% 0%;
@@ -50,6 +60,27 @@
   background-position: center;
   background-attachment: fixed;
   background-color: var(--bg-primary);
+
+  &::after {
+    content: "";
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 70vw;
+    height: 70vw;
+    background: url("/src/assets/Background-logo.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    animation: backgroundFloat 20s ease-in-out infinite;
+    opacity: 0.3;
+    z-index: -2;
+    pointer-events: none;
+  }
+
+  [data-theme="dark"] &::after {
+    opacity: 0.2;
+  }
 
   [data-theme="dark"] & {
     background: linear-gradient(
