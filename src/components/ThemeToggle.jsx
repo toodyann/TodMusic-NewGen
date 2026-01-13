@@ -8,9 +8,15 @@ function ThemeToggle() {
   });
 
   useEffect(() => {
+    // Force remove old theme first
+    document.documentElement.removeAttribute("data-theme");
+
+    // Force reflow to ensure browser recalculates styles
+    void document.documentElement.offsetHeight;
+
+    // Set new theme
     document.documentElement.setAttribute("data-theme", theme);
     localStorage.setItem("theme", theme);
-    console.log("Theme set to:", theme); // Для дебагу
   }, [theme]);
 
   const toggleTheme = () => {

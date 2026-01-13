@@ -15,6 +15,7 @@ export default function SongInfo({
   isFullscreen = false,
   isShuffle = false,
   onShuffleToggle,
+  t,
 }) {
   const audioRef = useRef(null);
   const [currentTime, setCurrentTime] = useState(0);
@@ -25,13 +26,11 @@ export default function SongInfo({
   const [newPlaylistName, setNewPlaylistName] = useState("");
   const [isRepeat, setIsRepeat] = useState(false);
 
-  // Якщо fullscreen, використовуємо існуючий audio елемент
   useEffect(() => {
     if (isFullscreen) {
       const existingAudio = document.querySelector(".song-info audio");
       if (existingAudio) {
         audioRef.current = existingAudio;
-        // Отримуємо поточний стан audio
         if (existingAudio.duration) {
           setDuration(existingAudio.duration);
         }
@@ -46,7 +45,6 @@ export default function SongInfo({
     if (song && song.previewUrl && audioRef.current) {
       const audio = audioRef.current;
 
-      // Якщо fullscreen і audio вже грає цю пісню, не перезавантажуємо
       if (isFullscreen && audio.src.includes(song.previewUrl)) {
         return;
       }
@@ -55,7 +53,6 @@ export default function SongInfo({
       audio.load();
       setCurrentTime(0);
 
-      // Якщо пісня вже грає, автоматично запускаємо нову
       if (isPlaying) {
         audio.play().catch((err) => console.error("Play error:", err));
       }
@@ -199,7 +196,7 @@ export default function SongInfo({
             <circle cx="6" cy="18" r="3"></circle>
             <circle cx="18" cy="16" r="3"></circle>
           </svg>
-          <p>Оберіть пісню</p>
+          <p>{t ? t("noSongSelected") : "Жодна пісня не вибрана"}</p>
         </div>
       </aside>
     );
@@ -245,7 +242,13 @@ export default function SongInfo({
               className={`shuffle-btn ${isShuffle ? "active" : ""}`}
               onClick={onShuffleToggle}
               title={
-                isShuffle ? "Вимкнути перемішування" : "Увімкнути перемішування"
+                isShuffle
+                  ? t
+                    ? t("disableShuffle")
+                    : "Вимкнути перемішування"
+                  : t
+                  ? t("enableShuffle")
+                  : "Увімкнути перемішування"
               }
             >
               <svg
@@ -319,7 +322,15 @@ export default function SongInfo({
             <button
               className={`repeat-btn ${isRepeat ? "active" : ""}`}
               onClick={() => setIsRepeat(!isRepeat)}
-              title={isRepeat ? "Вимкнути повтор" : "Увімкнути повтор"}
+              title={
+                isRepeat
+                  ? t
+                    ? t("disableRepeat")
+                    : "Вимкнути повтор"
+                  : t
+                  ? t("enableRepeat")
+                  : "Увімкнути повтор"
+              }
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -422,16 +433,20 @@ export default function SongInfo({
 
       <div className="song-meta">
         <div className="meta-item">
-          <span className="meta-label">Альбом</span>
-          <span className="meta-value">{song.album || "Unknown"}</span>
+          <span className="meta-label">{t ? t("album") : "Альбом"}</span>
+          <span className="meta-value">
+            {song.album || (t ? t("notSpecified") : "Unknown")}
+          </span>
         </div>
         <div className="meta-item">
-          <span className="meta-label">Жанр</span>
-          <span className="meta-value">{song.genre || "Unknown"}</span>
+          <span className="meta-label">{t ? t("genre") : "Жанр"}</span>
+          <span className="meta-value">
+            {song.genre || (t ? t("notSpecified") : "Unknown")}
+          </span>
         </div>
         {song.releaseDate && (
           <div className="meta-item">
-            <span className="meta-label">Рік</span>
+            <span className="meta-label">{t ? t("year") : "Рік"}</span>
             <span className="meta-value">
               {new Date(song.releaseDate).getFullYear()}
             </span>
@@ -457,7 +472,13 @@ export default function SongInfo({
           >
             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
           </svg>
-          {isFavorite ? "У улюблених" : "Подобається"}
+          {isFavorite
+            ? t
+              ? t("removeFavorite")
+              : "У улюблених"
+            : t
+            ? t("addFavorite")
+            : "Подобається"}
         </button>
 
         <div className="playlist-dropdown">
@@ -479,12 +500,14 @@ export default function SongInfo({
               <line x1="12" y1="5" x2="12" y2="19"></line>
               <line x1="5" y1="12" x2="19" y2="12"></line>
             </svg>
-            У плейліст
+            {t ? t("addToPlaylist") : "У плейліст"}
           </button>
 
           {showPlaylistMenu && (
             <div className="playlist-menu">
-              <div className="playlist-menu-header">Додати у плейліст</div>
+              <div className="playlist-menu-header">
+                {t ? t("addToPlaylist") : "Додати у плейліст"}
+              </div>
               {playlists.length > 0 ? (
                 <div className="playlist-list">
                   {playlists.map((playlist) => (
@@ -501,19 +524,25 @@ export default function SongInfo({
                   ))}
                 </div>
               ) : (
-                <p className="no-playlists">Немає плейлістів</p>
+                <p className="no-playlists">
+                  {t ? t("noPlaylists") : "Немає плейлістів"}
+                </p>
               )}
               <div className="create-playlist">
                 <input
                   type="text"
-                  placeholder="Назва нового плейліста"
+                  placeholder={
+                    t ? t("newPlaylistName") : "Назва нового плейліста"
+                  }
                   value={newPlaylistName}
                   onChange={(e) => setNewPlaylistName(e.target.value)}
                   onKeyPress={(e) =>
                     e.key === "Enter" && handleCreatePlaylist()
                   }
                 />
-                <button onClick={handleCreatePlaylist}>Створити</button>
+                <button onClick={handleCreatePlaylist}>
+                  {t ? t("create") : "Створити"}
+                </button>
               </div>
             </div>
           )}

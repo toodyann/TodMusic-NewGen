@@ -10,6 +10,7 @@ export default function Sidebar({
   favorites,
   onCreatePlaylist,
   onDeletePlaylist,
+  t,
 }) {
   const [newPlaylistName, setNewPlaylistName] = useState("");
   const [isCreating, setIsCreating] = useState(false);
@@ -37,14 +38,14 @@ export default function Sidebar({
 
   const favoritesPlaylist = {
     id: "favorites",
-    name: "Улюблені",
+    name: t ? t("favorites") : "Улюблені",
     count: favorites.length,
   };
 
   return (
     <aside className={`sidebar ${isOpen ? "open" : ""}`}>
       <div className="sidebar-header">
-        <h2>Плейлісти</h2>
+        <h2>{t("playlists")}</h2>
         <div className="sidebar-header-actions">
           <button
             className="add-playlist-btn"
@@ -89,17 +90,17 @@ export default function Sidebar({
         <div className="create-playlist-form">
           <input
             type="text"
-            placeholder="Назва плейлісту"
+            placeholder={t ? t("newPlaylistName") : "Назва плейлісту"}
             value={newPlaylistName}
             onChange={(e) => setNewPlaylistName(e.target.value)}
             onKeyPress={(e) => e.key === "Enter" && handleCreatePlaylist()}
             autoFocus
           />
           <button onClick={handleCreatePlaylist} className="create-btn">
-            Створити
+            {t ? t("create") : "Створити"}
           </button>
           <button onClick={() => setIsCreating(false)} className="cancel-btn">
-            Скасувати
+            {t ? t("cancel") : "Скасувати"}
           </button>
         </div>
       )}
@@ -128,7 +129,7 @@ export default function Sidebar({
           <div className="playlist-info">
             <span className="playlist-name">{favoritesPlaylist.name}</span>
             <span className="playlist-count">
-              {favoritesPlaylist.count} треків
+              {favoritesPlaylist.count} {t ? t("tracks") : "треків"}
             </span>
           </div>
         </button>
@@ -161,7 +162,7 @@ export default function Sidebar({
               <div className="playlist-info">
                 <span className="playlist-name">{playlist.name}</span>
                 <span className="playlist-count">
-                  {playlist.songs?.length || 0} треків
+                  {playlist.songs?.length || 0} {t ? t("tracks") : "треків"}
                 </span>
               </div>
             </button>
@@ -175,7 +176,7 @@ export default function Sidebar({
                   playlistName: playlist.name,
                 });
               }}
-              aria-label="Видалити плейліст"
+              aria-label={t ? t("deletePlaylist") : "Видалити плейліст"}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -200,8 +201,8 @@ export default function Sidebar({
 
       <ConfirmDialog
         isOpen={confirmDialog.isOpen}
-        title="Видалення плейліста"
-        message={`Ви впевнені, що хочете видалити плейліст "${confirmDialog.playlistName}"?`}
+        itemName={confirmDialog.playlistName}
+        t={t}
         onConfirm={() => {
           if (onDeletePlaylist) {
             onDeletePlaylist(confirmDialog.playlistId);
