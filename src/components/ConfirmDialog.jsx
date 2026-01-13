@@ -6,23 +6,27 @@ export default function ConfirmDialog({
   message,
   onConfirm,
   onCancel,
+  t,
+  itemName,
 }) {
   if (!isOpen) return null;
 
   return (
     <div className="confirm-dialog-overlay" onClick={onCancel}>
       <div className="confirm-dialog" onClick={(e) => e.stopPropagation()}>
-        <h3 className="confirm-dialog-title">{title}</h3>
-        <p className="confirm-dialog-message">{message}</p>
+        <h3 className="confirm-dialog-title">{t("confirmTitle")}</h3>
+        <p className="confirm-dialog-message">
+          {t("deleteConfirm").replace("{name}", itemName || "")}
+        </p>
         <div className="confirm-dialog-actions">
           <button className="confirm-dialog-btn cancel-btn" onClick={onCancel}>
-            Скасувати
+            {t("cancel")}
           </button>
           <button
             className="confirm-dialog-btn confirm-btn"
             onClick={onConfirm}
           >
-            Видалити
+            {t("delete")}
           </button>
         </div>
       </div>

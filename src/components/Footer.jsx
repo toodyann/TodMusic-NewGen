@@ -1,7 +1,7 @@
 import "../styles/scss/Components/footer.scss";
 import faviconImage from "../assets/FaviconTM.png";
 
-export default function Footer() {
+export default function Footer({ t }) {
   return (
     <footer className="footer">
       <div className="footer-container">
@@ -17,55 +17,59 @@ export default function Footer() {
         </div>
 
         <div className="footer-column">
-          <h4>Компанія</h4>
+          <h4>{t ? t("company") : "Компанія"}</h4>
           <ul>
             <li>
-              <a href="#about">Про нас</a>
+              <a href="#about">{t ? t("aboutUs") : "Про нас"}</a>
             </li>
             <li>
-              <a href="#login">Увійти</a>
+              <a href="#login">{t ? t("signIn") : "Увійти"}</a>
             </li>
           </ul>
         </div>
 
         <div className="footer-column">
-          <h4>Спільноти</h4>
+          <h4>{t ? t("communities") : "Спільноти"}</h4>
           <ul>
             <li>
-              <a href="#artists">Для виконавців</a>
+              <a href="#artists">{t ? t("forArtists") : "Для виконавців"}</a>
             </li>
             <li>
-              <a href="#advertisers">Для рекламодавців</a>
+              <a href="#advertisers">
+                {t ? t("forAdvertisers") : "Для рекламодавців"}
+              </a>
             </li>
             <li>
-              <a href="#investors">Для інвесторів</a>
+              <a href="#investors">
+                {t ? t("forInvestors") : "Для інвесторів"}
+              </a>
             </li>
           </ul>
         </div>
 
         <div className="footer-column">
-          <h4>Корисні посилання</h4>
+          <h4>{t ? t("usefulLinks") : "Корисні посилання"}</h4>
           <ul>
             <li>
-              <a href="#support">Підтримка</a>
+              <a href="#support">{t ? t("support") : "Підтримка"}</a>
             </li>
             <li>
-              <a href="#player">Вебпрогравач</a>
+              <a href="#player">{t ? t("webPlayer") : "Вебпрогравач"}</a>
             </li>
           </ul>
         </div>
 
         <div className="footer-column">
-          <h4>Підписки TodMusic</h4>
+          <h4>{t ? t("subscriptions") : "Підписки TodMusic"}</h4>
           <ul>
             <li>
-              <a href="#free">TodMusic Free</a>
+              <a href="#free">{t ? t("todMusicFree") : "TodMusic Free"}</a>
             </li>
           </ul>
         </div>
 
         <div className="footer-column">
-          <h4>Соціальні мережі</h4>
+          <h4>{t ? t("social") : "Соціальні мережі"}</h4>
           <div className="footer-social">
             <div className="social-telegram">
               <a
@@ -118,14 +122,16 @@ export default function Footer() {
       </div>
 
       <div className="footer-bottom">
-        <span>Юридична інформація</span>
-        <span>Центр безпеки й конфіденційності</span>
-        <span>Політика конфіденційності</span>
-        <span>Політика щодо файлів cookie</span>
-        <span>Про рекламу</span>
-        <span>Доступність</span>
-        <span>Україна (українська)</span>
-        <span>© 2025 TodMusic AB</span>
+        <span>{t ? t("legalInfo") : "Юридична інформація"}</span>
+        <span>
+          {t ? t("safetyCenter") : "Центр безпеки й конфіденційності"}
+        </span>
+        <span>{t ? t("privacyPolicy") : "Політика конфіденційності"}</span>
+        <span>{t ? t("cookiePolicy") : "Політика щодо файлів cookie"}</span>
+        <span>{t ? t("advertising") : "Про рекламу"}</span>
+        <span>{t ? t("accessibility") : "Доступність"}</span>
+        <span>{t ? t("region") : "Україна (українська)"}</span>
+        <span>{t ? t("copyright") : "© 2025 TodMusic AB"}</span>
       </div>
     </footer>
   );

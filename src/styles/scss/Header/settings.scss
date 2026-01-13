@@ -88,6 +88,33 @@
           color: var(--text-secondary);
         }
       }
+
+      .language-select {
+        display: flex;
+        gap: 8px;
+
+        .lang-btn {
+          padding: 8px 16px;
+          border: 1px solid var(--input-border);
+          border-radius: 6px;
+          background: transparent;
+          color: var(--text-primary);
+          font-size: 0.875rem;
+          cursor: pointer;
+          transition: all 0.2s ease;
+
+          &:hover {
+            background: var(--input-bg);
+            border-color: var(--accent-orange);
+          }
+
+          &.active {
+            background: var(--accent-orange);
+            border-color: var(--accent-orange);
+            color: white;
+          }
+        }
+      }
     }
   }
 }

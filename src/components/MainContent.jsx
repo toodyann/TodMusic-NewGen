@@ -12,6 +12,7 @@ export default function MainContent({
   favorites = [],
   isMobile = false,
   onBackToPlaylists,
+  t,
 }) {
   const songs = isSearchMode
     ? searchResults
@@ -48,7 +49,7 @@ export default function MainContent({
   };
 
   const getPlaylistName = () => {
-    if (playlistId === "favorites") return "Улюблені";
+    if (playlistId === "favorites") return t ? t("favorites") : "Улюблені";
     const playlist = playlists.find((p) => p.id === playlistId);
     return playlist?.name || "";
   };
@@ -72,7 +73,7 @@ export default function MainContent({
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
-            <span>Назад</span>
+            <span>{t ? t("back") : "Назад"}</span>
           </button>
           <h2 className="playlist-title">{getPlaylistName()}</h2>
         </div>
@@ -80,7 +81,7 @@ export default function MainContent({
       {songs.length === 0 ? (
         <div className="no-songs">
           {isSearchMode ? (
-            <p>Введіть запит для пошуку</p>
+            <p>{t ? t("searchPrompt") : "Введіть запит для пошуку"}</p>
           ) : playlistId === null ? (
             <div className="search-hint">
               <svg
@@ -95,11 +96,17 @@ export default function MainContent({
                 <circle cx="11" cy="11" r="8"></circle>
                 <path d="m21 21-4.35-4.35"></path>
               </svg>
-              <h3>Знайдіть свою музику</h3>
-              <p>Використовуйте пошук вгорі, щоб знайти улюблені треки</p>
+              <h3>{t ? t("findMusic") : "Знайдіть свою музику"}</h3>
+              <p>
+                {t
+                  ? t("useSearchTop")
+                  : "Використовуйте пошук вгорі, щоб знайти улюблені треки"}
+              </p>
             </div>
           ) : (
-            <p>У цьому плейлісті ще немає треків</p>
+            <p>
+              {t ? t("emptyPlaylist") : "У цьому плейлісті ще немає треків"}
+            </p>
           )}
         </div>
       ) : (

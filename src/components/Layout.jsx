@@ -10,10 +10,17 @@ import Settings from "./Settings.jsx";
 import MiniPlayer from "./MiniPlayer.jsx";
 import Footer from "./Footer.jsx";
 import { searchTracks } from "../Scripts/api.js";
+import { useTranslation } from "../Scripts/translations.js";
 import "../styles/scss/Layout/layout.scss";
 import "../styles/scss/Layout/searchPage.scss";
 
 export default function Layout() {
+  const [language, setLanguage] = useState(() => {
+    const saved = localStorage.getItem("todmusic_language");
+    return saved || "uk";
+  });
+  const t = useTranslation(language);
+
   const [selectedPlaylist, setSelectedPlaylist] = useState(() => {
     const saved = localStorage.getItem("todmusic_selectedPlaylist");
     return saved ? JSON.parse(saved) : null;
@@ -62,7 +69,6 @@ export default function Layout() {
     if (saved) {
       try {
         const parsed = JSON.parse(saved);
-        // Оновлюємо URL картинок до 600x600 в усіх плейлістах
         return parsed.map((playlist) => ({
           ...playlist,
           songs: playlist.songs.map((song) => ({
@@ -82,8 +88,6 @@ export default function Layout() {
     return [];
   });
 
-  // Видаляємо окремий useEffect для завантаження, бо тепер дані завантажуються при ініціалізації
-
   // Збереження favorites в localStorage при зміні
   useEffect(() => {
     localStorage.setItem("todmusic_favorites", JSON.stringify(favorites));
@@ -102,7 +106,6 @@ export default function Layout() {
     );
   }, [selectedPlaylist]);
 
-  // Збереження activeTab в localStorage при зміні
   useEffect(() => {
     localStorage.setItem("todmusic_activeTab", activeTab);
   }, [activeTab]);
@@ -229,9 +232,6 @@ export default function Layout() {
         }
         return playlist;
       });
-
-      console.log("Playlist updated:", updated);
-      return updated;
     });
   };
 
@@ -267,6 +267,11 @@ export default function Layout() {
     setSidebarOpen(false);
   };
 
+  const handleLanguageChange = (lang) => {
+    setLanguage(lang);
+    localStorage.setItem("todmusic_language", lang);
+  };
+
   const handleSearch = async (query) => {
     setSearchQuery(query);
 
@@ -290,7 +295,9 @@ export default function Layout() {
       console.log("Знайдено треків:", results.length);
     } catch (error) {
       console.error("Помилка пошуку:", error);
-      setSearchError("Не вдалося знайти треки. Спробуйте ще раз.");
+      setSearchError(
+        t ? t("searchError") : "Не вдалося знайти треки. Спробуйте ще раз."
+      );
       setSearchResults([]);
     } finally {
       setIsSearching(false);
@@ -372,6 +379,8 @@ export default function Layout() {
         activeTab={activeTab}
         isMobile={isMobile}
         selectedPlaylist={selectedPlaylist}
+        language={language}
+        t={t}
       />
       <div className="app-body">
         {sidebarOpen && !isMobile && (
@@ -386,25 +395,25 @@ export default function Layout() {
             favorites={favorites}
             onCreatePlaylist={createPlaylist}
             onDeletePlaylist={handleDeletePlaylist}
+            language={language}
+            t={t}
           />
         )}
         <div className="app-content-wrapper">
           {activeTab === "search" || showSearch ? (
             <div className="search-page">
-              {isSearching && <div className="loading">Пошук...</div>}
+              {isSearching && <div className="loading">{t("searching")}</div>}
               {searchError && <div className="error">{searchError}</div>}
               {!isSearching &&
                 !searchError &&
                 searchResults.length === 0 &&
                 searchQuery && (
                   <div className="no-results">
-                    Нічого не знайдено для "{searchQuery}"
+                    {t("noResults").replace("{query}", searchQuery)}
                   </div>
                 )}
               {!searchQuery && (
-                <div className="search-prompt">
-                  Введіть запит у поле пошуку вгорі
-                </div>
+                <div className="search-prompt">{t("searchPrompt")}</div>
               )}
               <MainContent
                 playlistId={null}
@@ -413,6 +422,8 @@ export default function Layout() {
                 isSearchMode={true}
                 playingSongId={playingSongId}
                 onPlayPause={handlePlayPause}
+                language={language}
+                t={t}
               />
             </div>
           ) : activeTab === "profile" || showProfile ? (
@@ -420,9 +431,16 @@ export default function Layout() {
               onBackClick={handleHomeClick}
               playlists={playlists}
               favorites={favorites}
+              language={language}
+              t={t}
             />
           ) : activeTab === "settings" || showSettings ? (
-            <Settings onBackClick={handleHomeClick} />
+            <Settings
+              onBackClick={handleHomeClick}
+              language={language}
+              onLanguageChange={handleLanguageChange}
+              t={t}
+            />
           ) : isMobile &&
             activeTab === "playlists" &&
             !selectedPlaylist ? null : (
@@ -437,9 +455,11 @@ export default function Layout() {
               favorites={favorites}
               isMobile={isMobile}
               onBackToPlaylists={handleBackToPlaylists}
+              language={language}
+              t={t}
             />
           )}
-          <Footer />
+          <Footer t={t} />
         </div>
         <SongInfo
           song={selectedSong}
@@ -454,6 +474,7 @@ export default function Layout() {
           onPreviousSong={handlePreviousSong}
           isShuffle={isShuffle}
           onShuffleToggle={() => setIsShuffle(!isShuffle)}
+          t={t}
         />
       </div>
 
@@ -538,15 +559,17 @@ export default function Layout() {
               isFullscreen={true}
               isShuffle={isShuffle}
               onShuffleToggle={() => setIsShuffle(!isShuffle)}
+              t={t}
             />
           </div>
         </div>
       )}
-
       <BottomNav
         activeTab={activeTab}
         onTabChange={handleTabChange}
         onSearchClick={handleSearchClick}
+        language={language}
+        t={t}
       />
     </div>
   );

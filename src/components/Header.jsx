@@ -15,6 +15,7 @@ export default function Header({
   activeTab,
   isMobile,
   selectedPlaylist,
+  t,
 }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const menuRef = useRef(null);
@@ -75,11 +76,12 @@ export default function Header({
       <Logo />
       {showSearch && (
         <Input
-          placeholder="Пошук музики..."
+          placeholder={t ? t("searchPlaceholder") : "Пошук музики..."}
           value={searchValue}
           onChange={(e) => onSearchChange(e.target.value)}
           onSearch={onSearch}
           onHomeClick={onHomeClick}
+          t={t}
         />
       )}
       <div className="profile-menu-container" ref={menuRef}>
@@ -120,7 +122,7 @@ export default function Header({
                 <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                 <circle cx="12" cy="7" r="4"></circle>
               </svg>
-              <span>Профіль</span>
+              <span>{t ? t("profile") : "Профіль"}</span>
             </button>
             <div className="dropdown-divider"></div>
             <button className="dropdown-item" onClick={handleSettingsMenuClick}>
@@ -138,7 +140,7 @@ export default function Header({
                 <path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path>
                 <circle cx="12" cy="12" r="3"></circle>
               </svg>
-              <span>Налаштування</span>
+              <span>{t ? t("settings") : "Налаштування"}</span>
             </button>
             <div className="dropdown-divider"></div>
             <button className="dropdown-item">
@@ -157,7 +159,7 @@ export default function Header({
                 <path d="M12 16v-4"></path>
                 <path d="M12 8h.01"></path>
               </svg>
-              <span>Про додаток</span>
+              <span>{t ? t("about") : "Про додаток"}</span>
             </button>
           </div>
         )}

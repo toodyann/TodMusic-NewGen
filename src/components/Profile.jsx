@@ -5,6 +5,7 @@ export default function Profile({
   onBackClick,
   playlists = [],
   favorites = [],
+  t,
 }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isSignUp, setIsSignUp] = useState(false);
@@ -14,19 +15,16 @@ export default function Profile({
   const [username, setUsername] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  // Підраховуємо загальну кількість треків у всіх плейлістах
   const totalTracks =
     playlists.reduce(
       (sum, playlist) => sum + (playlist.songs?.length || 0),
       0
     ) + favorites.length;
 
-  // Підраховуємо загальну тривалість (в годинах), припускаючи що кожен трек ~30 секунд (preview)
   const totalHours = Math.floor((totalTracks * 30) / 3600);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Тут буде логіка входу
     console.log("Login:", { email, password });
     setIsLoggedIn(true);
   };
@@ -34,10 +32,9 @@ export default function Profile({
   const handleSignUp = (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
-      alert("Паролі не співпадають!");
+      alert(t ? t("passwordMismatch") : "Паролі не співпадають!");
       return;
     }
-    // Тут буде логіка реєстрації
     console.log("Sign up:", { username, email, password });
     setIsLoggedIn(true);
   };
@@ -70,7 +67,7 @@ export default function Profile({
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
-            Назад
+            {t ? t("back") : "Назад"}
           </button>
           <div className="profile-avatar">
             <svg
@@ -88,10 +85,22 @@ export default function Profile({
               <circle cx="12" cy="7" r="4"></circle>
             </svg>
           </div>
-          <h2>{isSignUp ? "Реєстрація" : "Вхід в акаунт"}</h2>
+          <h2>
+            {isSignUp
+              ? t
+                ? t("signUp")
+                : "Реєстрація"
+              : t
+              ? t("accountSignIn")
+              : "Вхід в акаунт"}
+          </h2>
           <p className="profile-subtitle">
             {isSignUp
-              ? "Створіть акаунт для синхронізації даних"
+              ? t
+                ? t("createAccountPrompt")
+                : "Створіть акаунт для синхронізації даних"
+              : t
+              ? t("signInPrompt")
               : "Увійдіть щоб синхронізувати дані"}
           </p>
         </div>
@@ -99,19 +108,21 @@ export default function Profile({
         {isSignUp ? (
           <form className="login-form" onSubmit={handleSignUp}>
             <div className="form-group">
-              <label htmlFor="username">Ім'я користувача</label>
+              <label htmlFor="username">
+                {t ? t("username") : "Ім'я користувача"}
+              </label>
               <input
                 type="text"
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                placeholder="Ваше ім'я"
+                placeholder={t ? t("namePlaceholder") : "Ваше ім'я"}
                 required
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{t ? t("email") : "Email"}</label>
               <input
                 type="email"
                 id="email"
@@ -123,7 +134,7 @@ export default function Profile({
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Пароль</label>
+              <label htmlFor="password">{t ? t("password") : "Пароль"}</label>
               <div className="password-input">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -171,7 +182,9 @@ export default function Profile({
             </div>
 
             <div className="form-group">
-              <label htmlFor="confirmPassword">Підтвердіть пароль</label>
+              <label htmlFor="confirmPassword">
+                {t ? t("confirmPassword") : "Підтвердіть пароль"}
+              </label>
               <input
                 type={showPassword ? "text" : "password"}
                 id="confirmPassword"
@@ -184,11 +197,11 @@ export default function Profile({
             </div>
 
             <button type="submit" className="login-btn">
-              Зареєструватися
+              {t ? t("register") : "Зареєструватися"}
             </button>
 
             <div className="login-footer">
-              <span>Вже є акаунт?</span>
+              <span>{t ? t("alreadyHaveAccount") : "Вже є акаунт?"}</span>
               <span className="separator">•</span>
               <a
                 href="#"
@@ -198,14 +211,14 @@ export default function Profile({
                 }}
                 className="sign-up"
               >
-                Увійти
+                {t ? t("login") : "Увійти"}
               </a>
             </div>
           </form>
         ) : (
           <form className="login-form" onSubmit={handleLogin}>
             <div className="form-group">
-              <label htmlFor="email">Email</label>
+              <label htmlFor="email">{t ? t("email") : "Email"}</label>
               <input
                 type="email"
                 id="email"
@@ -217,7 +230,7 @@ export default function Profile({
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Пароль</label>
+              <label htmlFor="password">{t ? t("password") : "Пароль"}</label>
               <div className="password-input">
                 <input
                   type={showPassword ? "text" : "password"}
@@ -264,12 +277,12 @@ export default function Profile({
             </div>
 
             <button type="submit" className="login-btn">
-              Увійти
+              {t ? t("login") : "Увійти"}
             </button>
 
             <div className="login-footer">
               <a href="#" className="forgot-password">
-                Забули пароль?
+                {t ? t("forgotPassword") : "Забули пароль?"}
               </a>
               <span className="separator">•</span>
               <a
@@ -280,7 +293,7 @@ export default function Profile({
                 }}
                 className="sign-up"
               >
-                Зареєструватися
+                {t ? t("register") : "Зареєструватися"}
               </a>
             </div>
           </form>
@@ -307,7 +320,7 @@ export default function Profile({
             <line x1="19" y1="12" x2="5" y2="12"></line>
             <polyline points="12 19 5 12 12 5"></polyline>
           </svg>
-          Назад
+          {t ? t("back") : "Назад"}
         </button>
         <div className="profile-avatar">
           <svg
@@ -325,48 +338,64 @@ export default function Profile({
             <circle cx="12" cy="7" r="4"></circle>
           </svg>
         </div>
-        <h2>Мій профіль</h2>
-        <p className="profile-subtitle">Налаштуйте свій обліковий запис</p>
+        <h2>{t ? t("profileTitle") : "Мій профіль"}</h2>
+        <p className="profile-subtitle">
+          {t ? t("profileSubtitle") : "Налаштуйте свій обліковий запис"}
+        </p>
       </div>
 
       <div className="profile-section">
-        <h3>Особиста інформація</h3>
+        <h3>{t ? t("personalInfo") : "Особиста інформація"}</h3>
         <div className="profile-info-item">
-          <span className="info-label">Ім'я</span>
-          <span className="info-value empty">Не вказано</span>
+          <span className="info-label">{t ? t("name") : "Ім'я"}</span>
+          <span className="info-value empty">
+            {t ? t("notSpecified") : "Не вказано"}
+          </span>
         </div>
         <div className="profile-info-item">
-          <span className="info-label">Email</span>
-          <span className="info-value empty">Не вказано</span>
+          <span className="info-label">{t ? t("email") : "Email"}</span>
+          <span className="info-value empty">
+            {t ? t("notSpecified") : "Не вказано"}
+          </span>
         </div>
         <div className="profile-info-item">
-          <span className="info-label">Телефон</span>
-          <span className="info-value empty">Не вказано</span>
+          <span className="info-label">{t ? t("phone") : "Телефон"}</span>
+          <span className="info-value empty">
+            {t ? t("notSpecified") : "Не вказано"}
+          </span>
         </div>
       </div>
 
       <div className="profile-section">
-        <h3>Статистика</h3>
+        <h3>{t ? t("statistics") : "Статистика"}</h3>
         <div className="stats-grid">
           <div className="stat-item">
             <div className="stat-value">{playlists.length}</div>
-            <div className="stat-label">Плейлістів</div>
+            <div className="stat-label">
+              {t ? t("totalPlaylists") : "Плейлістів"}
+            </div>
           </div>
           <div className="stat-item">
             <div className="stat-value">{favorites.length}</div>
-            <div className="stat-label">Улюблених</div>
+            <div className="stat-label">
+              {t ? t("totalFavorites") : "Улюблених"}
+            </div>
           </div>
           <div className="stat-item">
             <div className="stat-value">{totalTracks}</div>
-            <div className="stat-label">Всього треків</div>
+            <div className="stat-label">
+              {t ? t("totalTracks") : "Всього треків"}
+            </div>
           </div>
         </div>
       </div>
 
       <div className="profile-actions">
-        <button className="profile-btn primary">Редагувати профіль</button>
+        <button className="profile-btn primary">
+          {t ? t("editProfile") : "Редагувати профіль"}
+        </button>
         <button className="profile-btn" onClick={handleLogout}>
-          Вийти
+          {t ? t("logout") : "Вийти"}
         </button>
       </div>
     </div>
