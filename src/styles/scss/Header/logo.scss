@@ -28,4 +28,13 @@
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
+  animation: spin 3s linear infinite;
+}
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
