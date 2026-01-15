@@ -159,14 +159,16 @@
     text-align: left;
     &:hover {
       background: var(--input-bg);
-      border-radius: 30px;
+      border-top-left-radius: 1rem;
+      border-bottom-left-radius: 1rem;
     }
 
     &.active {
       background: var(--input-bg);
       border-left: 3px solid var(--accent-orange);
       padding-left: 21px;
-      border-radius: 1rem;
+      border-top-left-radius: 1rem;
+      border-bottom-left-radius: 1rem;
     }
 
     .playlist-icon {

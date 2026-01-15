@@ -78,6 +78,7 @@ export default function MainContent({
           <h2 className="playlist-title">{getPlaylistName()}</h2>
         </div>
       )}
+      
       {songs.length === 0 ? (
         <div className="no-songs">
           {isSearchMode ? (
