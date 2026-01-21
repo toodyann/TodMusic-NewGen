@@ -94,6 +94,7 @@ export const translations = {
     favorite: "Улюблена",
     removeFavorite: "Видалити з улюблених",
     addFavorite: "Додати в улюблені",
+    removeSong: "Видалити",
     
     // Common
     ok: "OK",
@@ -225,6 +226,7 @@ export const translations = {
     favorite: "Favorite",
     removeFavorite: "Remove from Favorites",
     addFavorite: "Add to Favorites",
+    removeSong: "Remove",
     
     // Common
     ok: "OK",

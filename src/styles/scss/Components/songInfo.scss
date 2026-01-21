@@ -1,5 +1,5 @@
 .song-info {
-  width: 320px;
+  width: 350px;
   background: var(--bg-primary);
   border-left: 1px solid var(--input-border);
   padding: 16px;
@@ -435,9 +435,33 @@
             cursor: pointer;
             text-align: left;
             transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+
+            &::before {
+              content: "";
+              position: absolute;
+              top: 50%;
+              left: 50%;
+              width: 0;
+              height: 0;
+              border-radius: 50%;
+              background: var(--accent-orange);
+              opacity: 0.3;
+              transform: translate(-50%, -50%);
+              transition:
+                width 0.5s ease,
+                height 0.5s ease;
+            }
+
+            &:active::before {
+              width: 200%;
+              height: 200%;
+            }
 
             &:hover {
               background: var(--input-bg);
+              transform: translateX(4px);
             }
           }
         }

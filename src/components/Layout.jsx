@@ -9,6 +9,7 @@ import Profile from "./Profile.jsx";
 import Settings from "./Settings.jsx";
 import MiniPlayer from "./MiniPlayer.jsx";
 import Footer from "./Footer.jsx";
+import Toast from "./Toast.jsx";
 import { searchTracks } from "../Scripts/api.js";
 import { useTranslation } from "../Scripts/translations.js";
 import "../styles/scss/Layout/layout.scss";
@@ -44,6 +45,11 @@ export default function Layout() {
   const [isFullscreenPlayer, setIsFullscreenPlayer] = useState(false);
   const [isClosingPlayer, setIsClosingPlayer] = useState(false);
   const [isShuffle, setIsShuffle] = useState(false);
+  const [toast, setToast] = useState({
+    isVisible: false,
+    message: "",
+    type: "success",
+  });
   const [favorites, setFavorites] = useState(() => {
     const saved = localStorage.getItem("todmusic_favorites");
     if (saved) {
@@ -88,21 +94,18 @@ export default function Layout() {
     return [];
   });
 
-  // Збереження favorites в localStorage при зміні
   useEffect(() => {
     localStorage.setItem("todmusic_favorites", JSON.stringify(favorites));
   }, [favorites]);
 
-  // Збереження playlists в localStorage при зміні
   useEffect(() => {
     localStorage.setItem("todmusic_playlists", JSON.stringify(playlists));
   }, [playlists]);
 
-  // Збереження selectedPlaylist в localStorage при зміні
   useEffect(() => {
     localStorage.setItem(
       "todmusic_selectedPlaylist",
-      JSON.stringify(selectedPlaylist)
+      JSON.stringify(selectedPlaylist),
     );
   }, [selectedPlaylist]);
 
@@ -145,15 +148,15 @@ export default function Layout() {
       selectedPlaylist === "favorites"
         ? favorites
         : selectedPlaylist
-        ? playlists.find((p) => p.id === selectedPlaylist)?.songs || []
-        : searchResults;
+          ? playlists.find((p) => p.id === selectedPlaylist)?.songs || []
+          : searchResults;
 
     if (currentSongs.length === 0 || !selectedSong) return;
 
     let nextSong;
     if (isShuffle) {
       const availableSongs = currentSongs.filter(
-        (s) => s.id !== selectedSong.id
+        (s) => s.id !== selectedSong.id,
       );
       if (availableSongs.length > 0) {
         const randomIndex = Math.floor(Math.random() * availableSongs.length);
@@ -163,7 +166,7 @@ export default function Layout() {
       }
     } else {
       const currentIndex = currentSongs.findIndex(
-        (s) => s.id === selectedSong.id
+        (s) => s.id === selectedSong.id,
       );
       if (currentIndex < currentSongs.length - 1) {
         nextSong = currentSongs[currentIndex + 1];
@@ -181,14 +184,30 @@ export default function Layout() {
       selectedPlaylist === "favorites"
         ? favorites
         : selectedPlaylist
-        ? playlists.find((p) => p.id === selectedPlaylist)?.songs || []
-        : searchResults;
+          ? playlists.find((p) => p.id === selectedPlaylist)?.songs || []
+          : searchResults;
 
     if (currentSongs.length === 0 || !selectedSong) return;
 
     const currentIndex = currentSongs.findIndex(
-      (s) => s.id === selectedSong.id
+      (s) => s.id === selectedSong.id,
     );
+
+    if (currentIndex === 0) {
+      // Перезапустити поточну пісню
+      if (playingSongId === selectedSong.id) {
+        // Якщо пісня вже грає, просто скидаємо час
+        const audioElement = document.querySelector("audio");
+        if (audioElement) {
+          audioElement.currentTime = 0;
+        }
+      } else {
+        // Якщо пісня не грає, встановлюємо як граючу
+        setPlayingSongId(selectedSong.id);
+      }
+      return;
+    }
+
     if (currentIndex > 0) {
       const previousSong = currentSongs[currentIndex - 1];
       setSelectedSong(previousSong);
@@ -219,11 +238,18 @@ export default function Layout() {
   const addToPlaylist = (song, playlistId) => {
     if (!song) return;
 
+    let playlistName = "";
+    let alreadyExists = false;
+
     setPlaylists((prev) => {
       const updated = prev.map((playlist) => {
         if (playlist.id === playlistId) {
+          playlistName = playlist.name;
           const exists = playlist.songs.find((s) => s.id === song.id);
-          if (exists) return playlist;
+          if (exists) {
+            alreadyExists = true;
+            return playlist;
+          }
 
           return {
             ...playlist,
@@ -232,7 +258,22 @@ export default function Layout() {
         }
         return playlist;
       });
+      return updated;
     });
+
+    if (alreadyExists) {
+      setToast({
+        isVisible: true,
+        message: `${song.title} вже є в плейлісті ${playlistName}`,
+        type: "error",
+      });
+    } else {
+      setToast({
+        isVisible: true,
+        message: `${song.title} додано до ${playlistName}`,
+        type: "success",
+      });
+    }
   };
 
   const createPlaylist = (name) => {
@@ -243,6 +284,43 @@ export default function Layout() {
     };
     setPlaylists((prev) => [...prev, newPlaylist]);
   };
+
+  const removeSongFromPlaylist = (song, playlistId) => {
+    if (!song || !playlistId) return;
+
+    if (playlistId === "favorites") {
+      setFavorites((prev) => prev.filter((s) => s.id !== song.id));
+      setToast({
+        isVisible: true,
+        message: `${song.title} видалено з улюблених`,
+        type: "success",
+      });
+      return;
+    }
+
+    let playlistName = "";
+
+    setPlaylists((prev) => {
+      const updated = prev.map((playlist) => {
+        if (playlist.id === playlistId) {
+          playlistName = playlist.name;
+          return {
+            ...playlist,
+            songs: playlist.songs.filter((s) => s.id !== song.id),
+          };
+        }
+        return playlist;
+      });
+      return updated;
+    });
+
+    setToast({
+      isVisible: true,
+      message: `${song.title} видалено з "${playlistName}"`,
+      type: "success",
+    });
+  };
+
   const handleDeletePlaylist = (playlistId) => {
     setPlaylists((prev) => prev.filter((p) => p.id !== playlistId));
     if (selectedPlaylist === playlistId) {
@@ -296,7 +374,7 @@ export default function Layout() {
     } catch (error) {
       console.error("Помилка пошуку:", error);
       setSearchError(
-        t ? t("searchError") : "Не вдалося знайти треки. Спробуйте ще раз."
+        t ? t("searchError") : "Не вдалося знайти треки. Спробуйте ще раз.",
       );
       setSearchResults([]);
     } finally {
@@ -453,6 +531,7 @@ export default function Layout() {
               onPlayPause={handlePlayPause}
               playlists={playlists}
               favorites={favorites}
+              onRemoveSong={removeSongFromPlaylist}
               isMobile={isMobile}
               onBackToPlaylists={handleBackToPlaylists}
               language={language}
@@ -508,7 +587,7 @@ export default function Layout() {
                       handleCloseFullscreenPlayer();
                       document.removeEventListener(
                         "touchmove",
-                        handleTouchMove
+                        handleTouchMove,
                       );
                     }
                   };
@@ -518,10 +597,10 @@ export default function Layout() {
                     () => {
                       document.removeEventListener(
                         "touchmove",
-                        handleTouchMove
+                        handleTouchMove,
                       );
                     },
-                    { once: true }
+                    { once: true },
                   );
                 }}
               ></div>
@@ -559,6 +638,7 @@ export default function Layout() {
               isFullscreen={true}
               isShuffle={isShuffle}
               onShuffleToggle={() => setIsShuffle(!isShuffle)}
+              playingSongId={playingSongId}
               t={t}
             />
           </div>
@@ -570,6 +650,14 @@ export default function Layout() {
         onSearchClick={handleSearchClick}
         language={language}
         t={t}
+      />
+      <Toast
+        message={toast.message}
+        isVisible={toast.isVisible}
+        type={toast.type}
+        onClose={() =>
+          setToast({ isVisible: false, message: "", type: "success" })
+        }
       />
     </div>
   );

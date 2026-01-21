@@ -15,6 +15,7 @@ export default function SongInfo({
   isFullscreen = false,
   isShuffle = false,
   onShuffleToggle,
+  playingSongId = null,
   t,
 }) {
   const audioRef = useRef(null);
@@ -41,6 +42,18 @@ export default function SongInfo({
     }
   }, [isFullscreen]);
 
+  // Слухаємо на перезапуск reset flag рісні
+  useEffect(() => {
+    if (
+      audioRef.current &&
+      typeof playingSongId === "string" &&
+      playingSongId.includes("_reset")
+    ) {
+      audioRef.current.currentTime = 0;
+      setCurrentTime(0);
+    }
+  }, [playingSongId]);
+
   useEffect(() => {
     if (song && song.previewUrl && audioRef.current) {
       const audio = audioRef.current;
@@ -57,7 +70,7 @@ export default function SongInfo({
         audio.play().catch((err) => console.error("Play error:", err));
       }
     }
-  }, [song, isPlaying, isFullscreen]);
+  }, [song, isFullscreen]);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -247,8 +260,8 @@ export default function SongInfo({
                     ? t("disableShuffle")
                     : "Вимкнути перемішування"
                   : t
-                  ? t("enableShuffle")
-                  : "Увімкнути перемішування"
+                    ? t("enableShuffle")
+                    : "Увімкнути перемішування"
               }
             >
               <svg
@@ -328,8 +341,8 @@ export default function SongInfo({
                     ? t("disableRepeat")
                     : "Вимкнути повтор"
                   : t
-                  ? t("enableRepeat")
-                  : "Увімкнути повтор"
+                    ? t("enableRepeat")
+                    : "Увімкнути повтор"
               }
             >
               <svg
@@ -477,8 +490,8 @@ export default function SongInfo({
               ? t("removeFavorite")
               : "У улюблених"
             : t
-            ? t("addFavorite")
-            : "Подобається"}
+              ? t("addFavorite")
+              : "Подобається"}
         </button>
 
         <div className="playlist-dropdown">
