@@ -113,7 +113,7 @@
   }
 
   .playlist-nav {
-    width: 320px;
+    width: 300px;
     overflow-y: auto;
     padding: 8px 0;
 
@@ -132,6 +132,10 @@
       &:hover {
         background: var(--text-secondary);
       }
+    }
+
+    @media (max-width: 768px) {
+      width: 100%;
     }
   }
 
@@ -159,14 +163,25 @@
     text-align: left;
     &:hover {
       background: var(--input-bg);
-      border-radius: 30px;
+      border-top-left-radius: 1rem;
+      border-bottom-left-radius: 1rem;
     }
 
     &.active {
       background: var(--input-bg);
       border-left: 3px solid var(--accent-orange);
       padding-left: 21px;
-      border-radius: 1rem;
+      border-top-left-radius: 1rem;
+      border-bottom-left-radius: 1rem;
+
+      .playlist-name {
+        color: var(--accent-orange);
+        font-weight: 600;
+      }
+
+      .playlist-count {
+        color: var(--accent-orange);
+      }
     }
 
     .playlist-icon {

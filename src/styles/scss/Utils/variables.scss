@@ -1,6 +1,7 @@
 :root {
   /* Light Theme - White */
   --bg-primary: #ffffff;
+  --bg-primary-rgb: 255, 255, 255;
   --text-primary: #000000;
   --text-secondary: #666666;
   --accent-orange: #ff6b35;
@@ -19,6 +20,7 @@
 [data-theme="dark"] {
   /* Dark Theme - Black */
   --bg-primary: #000000;
+  --bg-primary-rgb: 0, 0, 0;
   --text-primary: #ffffff;
   --text-secondary: #aaaaaa;
   --accent-orange: #ff8c42;
