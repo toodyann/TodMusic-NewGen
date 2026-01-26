@@ -42,7 +42,6 @@ export default function SongInfo({
     }
   }, [isFullscreen]);
 
-  // Слухаємо на перезапуск reset flag рісні
   useEffect(() => {
     if (
       audioRef.current &&
@@ -116,7 +115,6 @@ export default function SongInfo({
         audio.currentTime = 0;
         audio.play().catch((err) => console.error("Play error:", err));
       } else {
-        // Переходимо до наступної пісні
         if (onNextSong) {
           onNextSong();
         } else if (onPlayPause) {

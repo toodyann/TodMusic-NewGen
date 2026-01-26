@@ -194,15 +194,12 @@ export default function Layout() {
     );
 
     if (currentIndex === 0) {
-      // Перезапустити поточну пісню
       if (playingSongId === selectedSong.id) {
-        // Якщо пісня вже грає, просто скидаємо час
         const audioElement = document.querySelector("audio");
         if (audioElement) {
           audioElement.currentTime = 0;
         }
       } else {
-        // Якщо пісня не грає, встановлюємо як граючу
         setPlayingSongId(selectedSong.id);
       }
       return;
@@ -316,7 +313,7 @@ export default function Layout() {
 
     setToast({
       isVisible: true,
-      message: `${song.title} видалено з "${playlistName}"`,
+      message: `${song.title} видалено з ${playlistName}`,
       type: "success",
     });
   };
@@ -443,6 +440,15 @@ export default function Layout() {
     setShowSettings(false);
     setSidebarOpen(false);
   };
+
+  useEffect(() => {
+    if (!selectedPlaylist) return;
+    if (selectedPlaylist === "favorites") return;
+    const exists = playlists.some((p) => p.id === selectedPlaylist);
+    if (!exists) {
+      setSelectedPlaylist("favorites");
+    }
+  }, [playlists, selectedPlaylist]);
 
   return (
     <div className="app-layout">

@@ -57,6 +57,30 @@ export default function Footer({ t }) {
               <a href="#player">{t ? t("webPlayer") : "Вебпрогравач"}</a>
             </li>
           </ul>
+          <div className="footer-app-badges">
+            <a
+              href="https://play.google.com/store"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="/googleplay-badge.svg"
+                alt="Get it on Google Play"
+                style={{ height: 45, marginRight: 8 }}
+              />
+            </a>
+            <a
+              href="https://www.apple.com/app-store/"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <img
+                src="/appstore-badge.svg"
+                alt="Download on the App Store"
+                style={{ height: 45 }}
+              />
+            </a>
+          </div>
         </div>
 
         <div className="footer-column">
