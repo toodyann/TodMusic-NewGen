@@ -64,7 +64,7 @@ export default function Footer({ t }) {
               rel="noopener noreferrer"
             >
               <img
-                src="/googleplay-badge.svg"
+                src={`${import.meta.env.BASE_URL}googleplay-badge.svg`}
                 alt="Get it on Google Play"
                 style={{ height: 45, marginRight: 8 }}
               />
@@ -75,7 +75,7 @@ export default function Footer({ t }) {
               rel="noopener noreferrer"
             >
               <img
-                src="/appstore-badge.svg"
+                src={`${import.meta.env.BASE_URL}appstore-badge.svg`}
                 alt="Download on the App Store"
                 style={{ height: 45 }}
               />
