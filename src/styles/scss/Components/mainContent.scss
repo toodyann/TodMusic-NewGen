@@ -1,3 +1,23 @@
+// Вимикаємо hover-ефекти для телефонів
+@media (hover: none) and (pointer: coarse), (max-width: 600px) {
+  .song-item:hover,
+  .song-item:active,
+  .song-item:hover .remove-song-btn,
+  .song-item .remove-song-btn:hover,
+  .song-item .play-pause-btn:hover {
+    background: unset !important;
+    color: unset !important;
+    transform: unset !important;
+    animation: unset !important;
+    box-shadow: unset !important;
+    opacity: unset !important;
+  }
+  .song-item .song-number,
+  .song-item .song-info .song-title {
+    color: unset !important;
+    transform: unset !important;
+  }
+}
 @keyframes wave-animation {
   0% {
     background-position: 0% 10%;
@@ -705,6 +725,7 @@
   .main-content {
     padding: 16px;
     margin-bottom: 1rem;
+    height: 100%;
 
     .content-header {
       margin-bottom: 16px;
