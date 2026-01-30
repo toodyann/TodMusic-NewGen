@@ -84,6 +84,19 @@
         }
       }
     }
+    // Для мобільних profile-btn-avatar не стилізується, svg повертається до стандартного розміру
+    @media (max-width: 768px) {
+      .profile-btn-avatar {
+        width: 24px;
+        height: 24px;
+        background: none;
+        border-radius: 0;
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
 
     &:hover {
       background: var(--input-bg);
