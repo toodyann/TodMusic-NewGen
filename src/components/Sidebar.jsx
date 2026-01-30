@@ -45,7 +45,7 @@ export default function Sidebar({
   return (
     <aside className={`sidebar ${isOpen ? "open" : ""}`}>
       <div className="sidebar-header">
-        <h2>{t("playlists")}</h2>
+        <h2>{t("library")}</h2>
         <div className="sidebar-header-actions">
           <button
             className="add-playlist-btn"
