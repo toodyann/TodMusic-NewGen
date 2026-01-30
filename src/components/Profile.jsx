@@ -7,26 +7,34 @@ export default function Profile({
   favorites = [],
   t,
 }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(() => {
+    return localStorage.getItem("todmusic_isLoggedIn") === "true";
+  });
   const [isSignUp, setIsSignUp] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState(
+    () => localStorage.getItem("todmusic_email") || "",
+  );
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState(
+    () => localStorage.getItem("todmusic_username") || "",
+  );
   const [showPassword, setShowPassword] = useState(false);
 
   const totalTracks =
     playlists.reduce(
       (sum, playlist) => sum + (playlist.songs?.length || 0),
-      0
+      0,
     ) + favorites.length;
 
   const totalHours = Math.floor((totalTracks * 30) / 3600);
 
   const handleLogin = (e) => {
     e.preventDefault();
-    console.log("Login:", { email, password });
     setIsLoggedIn(true);
+    localStorage.setItem("todmusic_isLoggedIn", "true");
+    localStorage.setItem("todmusic_email", email);
+    localStorage.setItem("todmusic_username", username);
   };
 
   const handleSignUp = (e) => {
@@ -35,8 +43,10 @@ export default function Profile({
       alert(t ? t("passwordMismatch") : "Паролі не співпадають!");
       return;
     }
-    console.log("Sign up:", { username, email, password });
     setIsLoggedIn(true);
+    localStorage.setItem("todmusic_isLoggedIn", "true");
+    localStorage.setItem("todmusic_email", email);
+    localStorage.setItem("todmusic_username", username);
   };
 
   const handleLogout = () => {
@@ -46,6 +56,9 @@ export default function Profile({
     setConfirmPassword("");
     setUsername("");
     setIsSignUp(false);
+    localStorage.removeItem("todmusic_isLoggedIn");
+    localStorage.removeItem("todmusic_email");
+    localStorage.removeItem("todmusic_username");
   };
 
   if (!isLoggedIn) {
@@ -91,8 +104,8 @@ export default function Profile({
                 ? t("signUp")
                 : "Реєстрація"
               : t
-              ? t("accountSignIn")
-              : "Вхід в акаунт"}
+                ? t("accountSignIn")
+                : "Вхід в акаунт"}
           </h2>
           <p className="profile-subtitle">
             {isSignUp
@@ -100,8 +113,8 @@ export default function Profile({
                 ? t("createAccountPrompt")
                 : "Створіть акаунт для синхронізації даних"
               : t
-              ? t("signInPrompt")
-              : "Увійдіть щоб синхронізувати дані"}
+                ? t("signInPrompt")
+                : "Увійдіть щоб синхронізувати дані"}
           </p>
         </div>
 
