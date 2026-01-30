@@ -1,3 +1,32 @@
+// Прогрес-обвід навколо кнопки play
+.mini-player-play-btn-progress {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.mini-player-progress-ring {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 48px;
+  height: 48px;
+  pointer-events: none;
+  z-index: 1;
+}
+.mini-player-progress-bg {
+  stroke: #eee;
+}
+.mini-player-progress-bar {
+  stroke: var(--accent-orange, #ff6a00);
+  transition: stroke-dashoffset 0.3s linear;
+}
+.mini-player-play-btn {
+  position: relative;
+  z-index: 2;
+}
 .mini-player {
   display: none;
   position: fixed;
