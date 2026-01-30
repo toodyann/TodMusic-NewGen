@@ -63,6 +63,41 @@
     transition: all 0.2s ease;
     flex-shrink: 0;
 
+    @media (min-width: 769px) {
+      border-radius: 50%;
+      padding: 0;
+      background: var(--input-bg);
+      border: 1.5px solid var(--input-border);
+      .profile-btn-avatar {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: var(--input-bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--text-secondary);
+        svg {
+          width: 32px;
+          height: 32px;
+          color: var(--text-secondary);
+        }
+      }
+    }
+    // Для мобільних profile-btn-avatar не стилізується, svg повертається до стандартного розміру
+    @media (max-width: 768px) {
+      .profile-btn-avatar {
+        width: 24px;
+        height: 24px;
+        background: none;
+        border-radius: 0;
+        svg {
+          width: 24px;
+          height: 24px;
+        }
+      }
+    }
+
     &:hover {
       background: var(--input-bg);
       border-color: var(--text-primary);
