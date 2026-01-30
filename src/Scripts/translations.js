@@ -4,6 +4,7 @@ export const translations = {
     search: "Пошук",
     home: "Головна",
     playlists: "Плейлісти",
+    library: "Бібліотека",
     profile: "Профіль",
     settings: "Налаштування",
     
@@ -137,6 +138,7 @@ export const translations = {
     search: "Search",
     home: "Home",
     playlists: "Playlists",
+    library: "Library",
     profile: "Profile",
     settings: "Settings",
     
