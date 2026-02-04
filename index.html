@@ -20,9 +20,8 @@
     />
     <meta name="apple-mobile-web-app-title" content="TodMusic" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#1DB954" />
+    <meta name="theme-color" content="#000000" />
     <meta name="description" content="Your music streaming application" />
-    <link rel="manifest" href="/manifest.json" />
     <title>TodMusic - NewGen</title>
     <script>
       (function () {
@@ -30,16 +29,6 @@
         const theme = savedTheme || "light";
         document.documentElement.setAttribute("data-theme", theme);
       })();
-    </script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("/sw.js")
-          .then((registration) => console.log("Service Worker registered"))
-          .catch((error) =>
-            console.log("Service Worker registration failed:", error),
-          );
-      }
     </script>
   </head>
   <body>

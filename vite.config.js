@@ -7,39 +7,38 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
+      strategies: 'generateSW',
+      injectRegister: 'auto',
+      includeAssets: ['src/assets/FaviconTM.png'],
       manifest: {
         name: 'TodMusic - NewGen',
         short_name: 'TodMusic',
         description: 'Your music streaming application',
-        theme_color: '#1DB954',
-        background_color: '#ffffff',
+        start_url: '/TodMusic-NewGen/',
+        scope: '/TodMusic-NewGen/',
+        display: 'standalone',
+        background_color: '#000000',
+        theme_color: '#000000',
+        orientation: 'portrait-primary',
         icons: [
           {
-            src: '/src/assets/FaviconTM.png',
+            src: '/TodMusic-NewGen/assets/FaviconTM.png',
+            sizes: '192x192 512x512',
+            type: 'image/png',
+            purpose: 'any',
+          },
+          {
+            src: '/TodMusic-NewGen/assets/FaviconTM.png',
             sizes: '192x192',
             type: 'image/png',
-          },
-          {
-            src: '/src/assets/FaviconTM.png',
-            sizes: '512x512',
-            type: 'image/png',
+            purpose: 'maskable',
           },
         ],
+        categories: ['music', 'entertainment'],
       },
       workbox: {
-        runtimeCaching: [
-          {
-            urlPattern: /^https:\/\/api\.example\.com\/.*/i,
-            handler: 'NetworkFirst',
-            options: {
-              cacheName: 'api-cache',
-              expiration: {
-                maxEntries: 50,
-                maxAgeSeconds: 5 * 60,
-              },
-            },
-          },
-        ],
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+        maximumFileSizeToCacheInBytes: 5000000,
       },
     }),
   ],
