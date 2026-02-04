@@ -22,7 +22,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#1DB954" />
     <meta name="description" content="Your music streaming application" />
-    <link rel="manifest" href="/TodMusic-NewGen/manifest.json" />
     <title>TodMusic - NewGen</title>
     <script>
       (function () {
@@ -30,16 +29,6 @@
         const theme = savedTheme || "light";
         document.documentElement.setAttribute("data-theme", theme);
       })();
-    </script>
-    <script>
-      if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("/TodMusic-NewGen/sw.js")
-          .then((registration) => console.log("Service Worker registered"))
-          .catch((error) =>
-            console.log("Service Worker registration failed:", error),
-          );
-      }
     </script>
     <script type="module" crossorigin src="/TodMusic-NewGen/assets/index-LIHT8ZM0.js"></script>
     <link rel="stylesheet" crossorigin href="/TodMusic-NewGen/assets/index-B4BmrHQs.css">
