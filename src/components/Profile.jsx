@@ -5,6 +5,8 @@ export default function Profile({
   onBackClick,
   playlists = [],
   favorites = [],
+  isMobile,
+  onSettingsClick,
   t,
 }) {
   const [isLoggedIn, setIsLoggedIn] = useState(() => {
@@ -407,6 +409,11 @@ export default function Profile({
         <button className="profile-btn primary">
           {t ? t("editProfile") : "Редагувати профіль"}
         </button>
+        {isMobile && (
+          <button className="profile-btn" onClick={onSettingsClick}>
+            {t ? t("settings") : "Налаштування"}
+          </button>
+        )}
         <button className="profile-btn" onClick={handleLogout}>
           {t ? t("logout") : "Вийти"}
         </button>

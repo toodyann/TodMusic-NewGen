@@ -516,6 +516,8 @@ export default function Layout() {
               playlists={playlists}
               favorites={favorites}
               language={language}
+              isMobile={isMobile}
+              onSettingsClick={handleSettingsClick}
               t={t}
             />
           ) : activeTab === "settings" || showSettings ? (
