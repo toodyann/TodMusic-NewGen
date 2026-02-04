@@ -9,7 +9,11 @@ export default defineConfig({
       registerType: 'autoUpdate',
       strategies: 'generateSW',
       injectRegister: 'auto',
-      includeAssets: ['src/assets/FaviconTM.png'],
+      includeAssets: [
+        'src/assets/FaviconTM.png',
+        'public/apple-touch-icon.png',
+        'public/icon-maskable.svg'
+      ],
       manifest: {
         name: 'TodMusic - NewGen',
         short_name: 'TodMusic',
@@ -22,8 +26,8 @@ export default defineConfig({
         orientation: 'portrait-primary',
         icons: [
           {
-            src: '/TodMusic-NewGen/assets/FaviconTM.png',
-            sizes: '192x192 512x512',
+            src: '/TodMusic-NewGen/apple-touch-icon.png',
+            sizes: '180x180',
             type: 'image/png',
             purpose: 'any',
           },
@@ -31,10 +35,36 @@ export default defineConfig({
             src: '/TodMusic-NewGen/assets/FaviconTM.png',
             sizes: '192x192',
             type: 'image/png',
+            purpose: 'any maskable',
+          },
+          {
+            src: '/TodMusic-NewGen/assets/FaviconTM.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'any maskable',
+          },
+          {
+            src: '/TodMusic-NewGen/icon-maskable.svg',
+            sizes: 'any',
+            type: 'image/svg+xml',
             purpose: 'maskable',
           },
         ],
         categories: ['music', 'entertainment'],
+        screenshots: [
+          {
+            src: '/TodMusic-NewGen/assets/FaviconTM.png',
+            sizes: '540x720',
+            type: 'image/png',
+            form_factor: 'narrow',
+          },
+          {
+            src: '/TodMusic-NewGen/assets/FaviconTM.png',
+            sizes: '1280x720',
+            type: 'image/png',
+            form_factor: 'wide',
+          },
+        ],
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg}'],

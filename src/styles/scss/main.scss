@@ -1,12 +1,67 @@
 @use "./Utils/reset.scss";
 @use "./Utils/variables.scss";
 @use "./Utils/fonts.scss";
+@use "./Utils/background.scss";
 
 html,
 body {
   background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body {
+  &::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 50%, rgba(255, 107, 53, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(180, 100, 200, 0.08) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  &::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+      repeating-linear-gradient(
+        0deg,
+        rgba(255, 107, 53, 0.05) 0px,
+        rgba(255, 107, 53, 0.05) 1px,
+        transparent 1px,
+        transparent 80px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        rgba(180, 100, 200, 0.04) 0px,
+        rgba(180, 100, 200, 0.04) 1px,
+        transparent 1px,
+        transparent 80px
+      );
+    pointer-events: none;
+    z-index: 1;
+    animation: pulse 5s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.3;
+  }
+  50% {
+    opacity: 0.6;
+  }
 }
 
 * {
