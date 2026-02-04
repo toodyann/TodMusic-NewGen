@@ -1,0 +1,1 @@
+if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/TodMusic-NewGen/sw.js', { scope: '/TodMusic-NewGen/' })})}
