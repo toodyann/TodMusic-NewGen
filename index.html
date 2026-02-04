@@ -2,27 +2,27 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/TodMusic-NewGen/assets/FaviconTM-BP5RV1rg.png" />
+    <link rel="icon" type="image/png" href="/TodMusic-NewGen/FaviconTM.png?v=1" />
 
     <!-- Apple Touch Icons для iOS та macOS -->
-    <link rel="apple-touch-icon" href="/TodMusic-NewGen/apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="180x180" href="/TodMusic-NewGen/apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="192x192" href="/TodMusic-NewGen/apple-touch-icon.png" />
-    <link rel="apple-touch-icon" sizes="512x512" href="/TodMusic-NewGen/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" href="/TodMusic-NewGen/FaviconTM.png?v=1" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/TodMusic-NewGen/FaviconTM.png?v=1" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/TodMusic-NewGen/FaviconTM.png?v=1" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/TodMusic-NewGen/FaviconTM.png?v=1" />
     <link
       rel="apple-touch-icon"
       sizes="152x152"
-      href="/TodMusic-NewGen/assets/FaviconTM-BP5RV1rg.png"
+      href="/TodMusic-NewGen/FaviconTM.png?v=1"
     />
     <link
       rel="apple-touch-icon"
       sizes="120x120"
-      href="/TodMusic-NewGen/assets/FaviconTM-BP5RV1rg.png"
+      href="/TodMusic-NewGen/FaviconTM.png?v=1"
     />
     <link
       rel="apple-touch-icon"
       sizes="76x76"
-      href="/TodMusic-NewGen/assets/FaviconTM-BP5RV1rg.png"
+      href="/TodMusic-NewGen/FaviconTM.png?v=1"
     />
 
     <!-- Мета-теги для iOS Web App -->
@@ -49,7 +49,7 @@
     <!-- Додаткові мета-теги для macOS -->
     <link
       rel="icon"
-      href="/TodMusic-NewGen/assets/FaviconTM-BP5RV1rg.png"
+      href="/TodMusic-NewGen/FaviconTM.png?v=1"
       type="image/png"
       sizes="any"
     />
@@ -66,6 +66,23 @@
 
     <!-- Manifest для PWA -->
     <link rel="manifest" href="/TodMusic-NewGen/manifest.webmanifest" />
+    
+    <!-- Favicon Glow Effect -->
+    <style>
+      @keyframes faviconGlow {
+        0%, 100% {
+          filter: drop-shadow(0 0 4px rgba(255, 107, 53, 0.8));
+        }
+        50% {
+          filter: drop-shadow(0 0 8px rgba(255, 107, 53, 1)) drop-shadow(0 0 12px rgba(255, 107, 53, 0.6));
+        }
+      }
+      
+      link[rel*="icon"] {
+        animation: faviconGlow 2s ease-in-out infinite;
+      }
+    </style>
+    
     <script>
       (function () {
         const savedTheme = localStorage.getItem("theme");
@@ -73,8 +90,8 @@
         document.documentElement.setAttribute("data-theme", theme);
       })();
     </script>
-    <script type="module" crossorigin src="/TodMusic-NewGen/assets/index-LIHT8ZM0.js"></script>
-    <link rel="stylesheet" crossorigin href="/TodMusic-NewGen/assets/index-B4BmrHQs.css">
+    <script type="module" crossorigin src="/TodMusic-NewGen/assets/index-CXDqgw7d.js"></script>
+    <link rel="stylesheet" crossorigin href="/TodMusic-NewGen/assets/index-D-_6VPkP.css">
   <link rel="manifest" href="/TodMusic-NewGen/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/TodMusic-NewGen/registerSW.js"></script></head>
   <body>
     <div id="root"></div>
