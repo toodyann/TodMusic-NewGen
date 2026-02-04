@@ -3,11 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/TodMusic-NewGen/assets/FaviconTM-BP5RV1rg.png" />
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href="/TodMusic-NewGen/assets/FaviconTM-BP5RV1rg.png"
-    />
+
+    <!-- Apple Touch Icons для iOS та macOS -->
+    <link rel="apple-touch-icon" href="/TodMusic-NewGen/apple-touch-icon.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/TodMusic-NewGen/apple-touch-icon.png" />
     <link
       rel="apple-touch-icon"
       sizes="152x152"
@@ -18,11 +17,37 @@
       sizes="120x120"
       href="/TodMusic-NewGen/assets/FaviconTM-BP5RV1rg.png"
     />
+    <link
+      rel="apple-touch-icon"
+      sizes="76x76"
+      href="/TodMusic-NewGen/assets/FaviconTM-BP5RV1rg.png"
+    />
+
+    <!-- Мета-теги для iOS Web App -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
     <meta name="apple-mobile-web-app-title" content="TodMusic" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="apple-app-status-bar-style" content="black-translucent" />
+
+    <!-- Мета-теги для macOS Safari -->
+    <meta name="application-name" content="TodMusic" />
+    <meta name="msapplication-TileColor" content="#000000" />
+    <meta name="msapplication-config" content="/TodMusic-NewGen/browserconfig.xml" />
+
+    <!-- Масштабування та viewport -->
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no"
+    />
     <meta name="theme-color" content="#000000" />
     <meta name="description" content="Your music streaming application" />
     <title>TodMusic - NewGen</title>
+
+    <!-- Manifest для PWA -->
+    <link rel="manifest" href="/TodMusic-NewGen/manifest.webmanifest" />
     <script>
       (function () {
         const savedTheme = localStorage.getItem("theme");
